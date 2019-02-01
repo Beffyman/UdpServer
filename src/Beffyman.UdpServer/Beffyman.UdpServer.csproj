@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
+		<!--<TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>-->
+		<IsPackable>true</IsPackable>
+		<Description>A Microsoft.Extensions.Hosting extension that implements a HostedService that accepts Udp messages into UdpHandlers, abstracting away the socket layer</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.IO.Pipelines" Version="4.5.3" />
+		<PackageReference Include="System.Threading.Channels" Version="4.5.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Beffyman.UdpContracts\Beffyman.UdpContracts.csproj" />
+	</ItemGroup>
+
+</Project>
