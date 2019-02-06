@@ -1,18 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Beffyman.UdpContracts.Serializers;
+using Beffyman.UdpServer.Internal.HandlerMapping;
 
 namespace Beffyman.UdpServer
 {
 	public abstract class UdpHandler<T>
 	{
-		public abstract Task HandleAsync(T request);
+		protected int Bytes { get; private set; }
+		protected IPAddress Sender { get; private set; }
 
-		internal Task Handle(ReadOnlyMemory<byte> data, ISerializer serializer)
+		internal void SetInfo(in HandlerInfo info)
 		{
-			return HandleAsync(serializer.Deserialize<T>(data));
+			Bytes = info.Bytes;
+			Sender = info.Sender;
+		}
+
+
+		public abstract ValueTask HandleAsync(in T request);
+
+		internal ValueTask Handle(in HandlerInfo info, ISerializer serializer)
+		{
+			SetInfo(info);
+
+			return HandleAsync(serializer.Deserialize<T>(info.Data));
 		}
 
 	}

@@ -9,7 +9,7 @@ namespace Beffyman.UdpContracts
 		public readonly ReadOnlyMemory<byte> Data;
 		public readonly int Length;
 
-		public Datagram(ReadOnlyMemory<byte> data)
+		public Datagram(in ReadOnlyMemory<byte> data)
 		{
 			Data = data;
 			Length = data.Length;

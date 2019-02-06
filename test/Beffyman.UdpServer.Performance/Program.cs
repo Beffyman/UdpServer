@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 using BenchmarkDotNet.Running;
 
 namespace Beffyman.UdpServer.Performance
@@ -7,7 +7,14 @@ namespace Beffyman.UdpServer.Performance
 	{
 		public static void Main(string[] args)
 		{
-			var summary = BenchmarkRunner.Run<UdpServerJob>();
+			try
+			{
+				var summary = BenchmarkRunner.Run<UdpServerJob>();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+			}
 		}
 
 

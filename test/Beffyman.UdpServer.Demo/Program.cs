@@ -13,9 +13,11 @@ namespace Beffyman.UdpServer.Demo
 			return UdpHostBuilder.CreateDefaultBuilder(args,
 				udpConfig =>
 				{
-					udpConfig.Port = 6002;
+					udpConfig.ReceivePort = 6002;
+					//udpConfig.ThreadExecution = HandlerThreadExecution.Inline;
 					udpConfig.UseSerializer<UdpMessagePackSerializer>();
 				})
+				.UseDefaultLogging()
 				.ConfigureServices(services =>
 				{
 					services.AddSingleton<ICounterService, CounterService>();

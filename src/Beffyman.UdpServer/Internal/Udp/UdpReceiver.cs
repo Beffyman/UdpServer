@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO.Pipelines;
+using System.Net;
 using System.Net.Sockets;
 
-namespace Beffyman.UdpServer.Internal
+namespace Beffyman.UdpServer.Internal.Udp
 {
 	internal sealed class UdpReceiver : IDisposable
 	{
@@ -19,16 +20,10 @@ namespace Beffyman.UdpServer.Internal
 
 		public SocketAwaitableEventArgs ReceiveAsync(in Memory<byte> buffer)
 		{
-#if NETCOREAPP
-            _awaitableEventArgs.SetBuffer(buffer);
-#elif NETSTANDARD
-			var segment = buffer.GetArray();
+			_awaitableEventArgs.SetBuffer(buffer);
+			_awaitableEventArgs.RemoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
-			_awaitableEventArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
-#else
-#error TFMs need to be updated
-#endif
-			if (!_socket.ReceiveAsync(_awaitableEventArgs))
+			if (!_socket.ReceiveMessageFromAsync(_awaitableEventArgs))
 			{
 				_awaitableEventArgs.Complete();
 			}

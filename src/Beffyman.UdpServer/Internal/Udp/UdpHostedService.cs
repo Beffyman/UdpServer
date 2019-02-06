@@ -1,9 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Beffyman.UdpServer.Internal;
+using Beffyman.UdpServer.Internal.Udp;
 using Microsoft.Extensions.Hosting;
 
-namespace Beffyman.UdpServer
+namespace Beffyman.UdpServer.Internal.Udp
 {
 	internal sealed class UdpHostedService : IHostedService
 	{

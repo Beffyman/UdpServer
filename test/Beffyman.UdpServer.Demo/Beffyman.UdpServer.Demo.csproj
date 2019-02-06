@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<TargetFramework>netcoreapp2.2</TargetFramework>
 		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 
@@ -13,5 +13,11 @@
 
 	<ItemGroup>
 		<Content Include="**\*.json" Exclude="bin\**\*;obj\**\*" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="..\..\DOCKERFILE.demo">
+	    <Link>DOCKERFILE.demo</Link>
+	  </Content>
 	</ItemGroup>
 </Project>

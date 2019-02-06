@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Beffyman.UdpServer.Internal
+namespace Beffyman.UdpServer.Internal.Udp
 {
 	public sealed class SocketAwaitableEventArgs : SocketAsyncEventArgs, INotifyCompletion
 	{
@@ -35,7 +35,28 @@ namespace Beffyman.UdpServer.Internal
 				ThrowSocketException(SocketError);
 			}
 
-			return BytesTransferred;
+			//So we get the # of bytes transfered to know the current end of the memory block
+			int index = BytesTransferred;
+			//Then we convert the sender address into a byte array
+			var addressBytes = ReceiveMessageFromPacketInfo.Address.GetAddressBytes();
+
+			//Then we write the sender address into the buffer
+			for (int i = 0; i < addressBytes.Length; i++)
+			{
+				MemoryBuffer.Span[index + i] = addressBytes[i];
+			}
+
+			//Then we get the byte array for the length of the address bytes
+			var lengthBytes = new Int32Converter(addressBytes.Length);
+
+			//And then write the length onto the end of the buffer
+			MemoryBuffer.Span[index + addressBytes.Length + 0] = lengthBytes.Byte1;
+			MemoryBuffer.Span[index + addressBytes.Length + 1] = lengthBytes.Byte2;
+			MemoryBuffer.Span[index + addressBytes.Length + 2] = lengthBytes.Byte3;
+			MemoryBuffer.Span[index + addressBytes.Length + 3] = lengthBytes.Byte4;
+
+			//We always know the last 4 are the length of the address, then we can splice up and get the address and then the rest above it is the data
+			return index + addressBytes.Length + 4;
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]

@@ -11,7 +11,7 @@ namespace Beffyman.UdpServer.Demo.Services
 	{
 		void Start(int expected);
 		void Stop();
-		void Count();
+		void Count(int bytes);
 	}
 
 	public class CounterService : ICounterService
@@ -19,6 +19,7 @@ namespace Beffyman.UdpServer.Demo.Services
 		private readonly Stopwatch _timer;
 		private readonly ILogger _logger;
 		private int _count;
+		private int _size;
 		private int _expected;
 
 		public CounterService(ILogger<CounterService> logger)
@@ -33,8 +34,9 @@ namespace Beffyman.UdpServer.Demo.Services
 			_timer.Start();
 		}
 
-		public void Count()
+		public void Count(int bytes)
 		{
+			_size += bytes;
 			_count++;
 		}
 
@@ -42,9 +44,8 @@ namespace Beffyman.UdpServer.Demo.Services
 		{
 			_timer.Stop();
 
-			var dropped = 1 - (_count / (double)_expected);
-			string droppedStr = null;
-
+			double dropped = (1.0d - (_count / (double)_expected)) * 100;
+			string droppedStr;
 			if (dropped == double.NegativeInfinity)
 			{
 				droppedStr = "0";
@@ -54,8 +55,19 @@ namespace Beffyman.UdpServer.Demo.Services
 				droppedStr = dropped.ToString();
 			}
 
-			_logger.LogInformation($"Elapsed time is {_timer.Elapsed.TotalSeconds.ToString()} for {_count.ToString()} messages, {droppedStr}% dropped");
+			_logger.LogInformation(
+$@"---------------------------------------------------------------------
+	Expected {_expected.ToString()} messages.
+	Handled {_count.ToString()} messages.
+	Elapsed time is {_timer.Elapsed.TotalSeconds.ToString()}.
+	{droppedStr}% messages dropped.
+	{Math.Round(_count / _timer.Elapsed.TotalSeconds, 2)} Messages/sec
+	{_size} bytes
+	{Math.Round((_size / 1024) / _timer.Elapsed.TotalSeconds, 2)} megabytes/sec
+---------------------------------------------------------------------");
 			_count = 0;
+			_size = 0;
+			_expected = 0;
 		}
 	}
 }

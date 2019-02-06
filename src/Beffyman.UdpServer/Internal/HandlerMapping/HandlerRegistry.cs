@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Beffyman.UdpServer.Internal
+namespace Beffyman.UdpServer.Internal.HandlerMapping
 {
-	public class ControllerRegistry
+	internal sealed class HandlerRegistry
 	{
 		public IEnumerable<Type> Handlers { get; private set; }
 
-		public ControllerRegistry(IEnumerable<Type> handlers)
+		public HandlerRegistry(IEnumerable<Type> handlers)
 		{
 			Handlers = handlers;
 		}

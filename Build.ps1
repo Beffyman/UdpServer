@@ -46,7 +46,14 @@ function GetVersion{
 	Write-Host "---Version $version will be used---" -ForegroundColor Magenta;
 }
 
-GetVersion;
-CreateArtifactsFolder;
+GetVersion | Out-Host;
+CreateArtifactsFolder | Out-Host;
 
+Write-Host "=====Build=====" -ForegroundColor Magenta;
+dotnet build -c Release;
+
+Write-Host "====Test====" -ForegroundColor Magenta;
+dotnet test -c Release;
+
+Write-Host "=====Pack====" -ForegroundColor Magenta;
 dotnet pack -c Release -o $artifacts -p:PackageVersion="$version";

@@ -15,10 +15,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Demo", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{42172268-FC3F-4644-B482-4D3CB177C398}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		after.Beffyman.UdpServer.sln.targets = after.Beffyman.UdpServer.sln.targets
+		appveyor.yml = appveyor.yml
 		Build.ps1 = Build.ps1
+		Clean.ps1 = Clean.ps1
 		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		docker-demo.ps1 = docker-demo.ps1
 		global.json = global.json
 		LICENSE = LICENSE
 		README.md = README.md
@@ -36,6 +42,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpContracts.Serializers", "src\Beffyman.UdpContracts.Serializers\Beffyman.UdpContracts.Serializers.csproj", "{24EB4CD8-5266-49C5-8C7D-B2AB4EFB1E97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpContracts.Serializers.MessagePack", "src\Beffyman.UdpContracts.Serializers.MessagePack\Beffyman.UdpContracts.Serializers.MessagePack.csproj", "{FC6B129D-4882-49D8-9A4F-AA5A39A786D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpContracts.Serializers.NewtonsoftJson", "src\Beffyman.UdpContracts.Serializers.NewtonsoftJson\Beffyman.UdpContracts.Serializers.NewtonsoftJson.csproj", "{689FAE07-D24A-44F0-9D79-E15518ED1151}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpContracts.Serializers.Utf8Json", "src\Beffyman.UdpContracts.Serializers.Utf8Json\Beffyman.UdpContracts.Serializers.Utf8Json.csproj", "{1CBE2E30-DD59-4482-8267-278D9471773D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +89,14 @@ Global
 		{FC6B129D-4882-49D8-9A4F-AA5A39A786D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC6B129D-4882-49D8-9A4F-AA5A39A786D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC6B129D-4882-49D8-9A4F-AA5A39A786D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{689FAE07-D24A-44F0-9D79-E15518ED1151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{689FAE07-D24A-44F0-9D79-E15518ED1151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{689FAE07-D24A-44F0-9D79-E15518ED1151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{689FAE07-D24A-44F0-9D79-E15518ED1151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CBE2E30-DD59-4482-8267-278D9471773D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CBE2E30-DD59-4482-8267-278D9471773D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CBE2E30-DD59-4482-8267-278D9471773D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CBE2E30-DD59-4482-8267-278D9471773D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +111,8 @@ Global
 		{D67E45CE-E985-4876-A6F2-C19C44901E5D} = {742F1E49-C1FD-4A69-87E3-AC73A6B8B679}
 		{24EB4CD8-5266-49C5-8C7D-B2AB4EFB1E97} = {2D7F1212-AA60-4386-A8D2-B156030B308A}
 		{FC6B129D-4882-49D8-9A4F-AA5A39A786D0} = {2D7F1212-AA60-4386-A8D2-B156030B308A}
+		{689FAE07-D24A-44F0-9D79-E15518ED1151} = {2D7F1212-AA60-4386-A8D2-B156030B308A}
+		{1CBE2E30-DD59-4482-8267-278D9471773D} = {2D7F1212-AA60-4386-A8D2-B156030B308A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1C30877-C4F2-4BA2-A04A-60CF8E49AC97}

@@ -4,8 +4,7 @@ using System.Text;
 
 namespace Beffyman.UdpServer.Demo.Contracts
 {
-	public readonly struct StopTimerMessage
+	public readonly struct ShutdownMessage
 	{
-
 	}
 }

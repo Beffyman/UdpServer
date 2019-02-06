@@ -8,10 +8,10 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Beffyman.UdpServer.Internal.ControllerMappers;
+using Beffyman.UdpServer.Internal.HandlerMapping;
 using Microsoft.Extensions.Logging;
 
-namespace Beffyman.UdpServer.Internal
+namespace Beffyman.UdpServer.Internal.Udp
 {
 	/// <summary>
 	/// Clone of the SocketConnection from Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets
@@ -19,7 +19,6 @@ namespace Beffyman.UdpServer.Internal
 	internal sealed class UdpConnection : IDisposable
 	{
 		private static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-		private static readonly bool IsMacOS = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
 		internal readonly Pipe _pipe;
 
@@ -29,7 +28,7 @@ namespace Beffyman.UdpServer.Internal
 
 		private readonly Socket _socket;
 		private readonly ILogger _logger;
-		private readonly ControllerMapper _controllerMapper;
+		private readonly HandlerMapper _handlerMapper;
 
 		private readonly UdpReceiver _receiver;
 		private readonly CancellationTokenSource _connectionClosingCts = new CancellationTokenSource();
@@ -43,18 +42,18 @@ namespace Beffyman.UdpServer.Internal
 			MemoryPool<byte> memoryPool,
 			PipeScheduler scheduler,
 			ILogger logger,
-			ControllerMapper controllerMapper)
+			HandlerMapper handlerMapper)
 		{
 			Debug.Assert(socket != null);
 			Debug.Assert(memoryPool != null);
 			Debug.Assert(logger != null);
-			Debug.Assert(controllerMapper != null);
+			Debug.Assert(handlerMapper != null);
 
 			_socket = socket;
 			MemoryPool = memoryPool;
 			Scheduler = scheduler;
 			_logger = logger;
-			_controllerMapper = controllerMapper;
+			_handlerMapper = handlerMapper;
 
 			// On *nix platforms, Sockets already dispatches to the ThreadPool.
 			// Yes, the IOQueues are still used for the PipeSchedulers. This is intentional.
@@ -226,7 +225,7 @@ namespace Beffyman.UdpServer.Internal
 					{
 						if (!seg.IsEmpty)
 						{
-							await _controllerMapper.HandleAsync(seg);
+							await _handlerMapper.HandleAsync(seg);
 						}
 					}
 				}

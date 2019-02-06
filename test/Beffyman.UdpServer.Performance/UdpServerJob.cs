@@ -9,50 +9,101 @@ using Microsoft.Extensions.Hosting;
 using Beffyman.UdpContracts;
 using Beffyman.UdpServer.Performance.Contracts;
 using Beffyman.UdpContracts.Serializers.MessagePack;
+using Beffyman.UdpContracts.Serializers.Utf8Json;
+using Beffyman.UdpContracts.Serializers.NewtonsoftJson;
+using Beffyman.UdpServer.Internal.HandlerMapping;
+using Beffyman.UdpServer.Performance.Handlers;
+using Beffyman.UdpContracts.Serializers;
 
 namespace Beffyman.UdpServer.Performance
 {
 	/*
 	 * Need to make a performance test for a bunch of messages coming into the server
 	 */
+	[MemoryDiagnoser]
 	public class UdpServerJob
 	{
-		private IHost _host;
+		private HandlerMapping _mapping;
+
+		private ISerializer _serializer;
+		private Datagram _dgram;
+		private SmallMessageHandler _handler;
+		private HandlerInfo _handlerInfo;
 
 		[GlobalSetup]
-		public async Task SetupAsync()
+		public void Setup()
 		{
-			_host = UdpHostBuilder.CreateDefaultBuilder()
-				.AddUdpHandlers(typeof(UdpServerJob).Assembly)
-				.Build();
-
-			await _host.StartAsync();
+			_mapping = new HandlerMapping(typeof(SmallMessageHandler));
+			_serializer = UdpMessagePackSerializer.Instance;
+			_dgram = UdpMessage.Create(new SmallMessage(10), _serializer).ToDgram(_serializer);
+			_handler = new SmallMessageHandler();
+			_handlerInfo = new HandlerInfo(_dgram, IPAddress.Loopback);
 		}
 
 		[GlobalCleanup]
-		public async Task CleanupAsync()
+		public void Cleanup()
 		{
-			await _host.StopAsync();
+			_mapping = null;
+		}
 
-			_host.Dispose();
+		#region HandlerMapping
+
+
+
+		[Benchmark]
+		public ValueTask HandlerInvoke()
+		{
+			//We have an allocation from the deserialize
+			return _mapping.HandleAsync(_handler, _handlerInfo, _serializer);
 		}
 
 		[Benchmark]
-		[MemoryDiagnoser]
-		public byte[] SendMessages()
+		public Delegate HandlerMapping()
 		{
-			//var endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6100);
-			//var client = new UdpClient();
-			//client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-			//client.Connect(endpoint);
-
-			//
-
-			//client.Send(msg, UdpMessagePackSerializer.Instance);
-
-			var msg = new SmallMessage(10);
-			var udpMessage = UdpMessage.Create(msg, UdpMessagePackSerializer.Instance);
-			return udpMessage.ToDgram(UdpMessagePackSerializer.Instance).Data.ToArray();
+			return new HandlerMapping(typeof(SmallMessageHandler)).HandleAsync;
 		}
+
+
+		#endregion HandlerMapping
+
+		#region Serialization Alloc Benchmarks
+
+		[Benchmark]
+		public ReadOnlyMemory<byte> DgramAlloc_MessagePack()
+		{
+			return UdpMessage.Create(new SmallMessage(10), UdpMessagePackSerializer.Instance).ToDgram(UdpMessagePackSerializer.Instance).Data;
+		}
+
+		[Benchmark]
+		public UdpMessage UdpMessageAlloc_MessagePack()
+		{
+			return UdpMessage.Create(new SmallMessage(10), UdpMessagePackSerializer.Instance);
+		}
+
+		[Benchmark]
+		public ReadOnlyMemory<byte> DgramAlloc_Utf8Json()
+		{
+			return UdpMessage.Create(new SmallMessage(10), UdpUtf8JsonSerializer.Instance).ToDgram(UdpUtf8JsonSerializer.Instance).Data;
+		}
+
+		[Benchmark]
+		public UdpMessage UdpMessageAlloc_Utf8Json()
+		{
+			return UdpMessage.Create(new SmallMessage(10), UdpUtf8JsonSerializer.Instance);
+		}
+
+		[Benchmark]
+		public ReadOnlyMemory<byte> DgramAlloc_Newtonsoft()
+		{
+			return UdpMessage.Create(new SmallMessage(10), UdpNewtonsoftJsonSerializer.Instance).ToDgram(UdpNewtonsoftJsonSerializer.Instance).Data;
+		}
+
+		[Benchmark]
+		public UdpMessage UdpMessageAlloc_Newtonsoft()
+		{
+			return UdpMessage.Create(new SmallMessage(10), UdpNewtonsoftJsonSerializer.Instance);
+		}
+
+		#endregion Serialization Alloc Benchmarks
 	}
 }

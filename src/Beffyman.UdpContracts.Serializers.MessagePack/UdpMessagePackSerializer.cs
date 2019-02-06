@@ -8,7 +8,7 @@ namespace Beffyman.UdpContracts.Serializers.MessagePack
 	{
 		public static readonly UdpMessagePackSerializer Instance = new UdpMessagePackSerializer();
 
-		public object Deserialize(in ReadOnlyMemory<byte> sequence, Type type)
+		public object Deserialize(in ReadOnlyMemory<byte> sequence, in Type type)
 		{
 			return MessagePackSerializer.NonGeneric.Deserialize(type, sequence.ToArray(), ContractlessStandardResolver.Instance);
 		}
@@ -19,7 +19,7 @@ namespace Beffyman.UdpContracts.Serializers.MessagePack
 			return MessagePackSerializer.Deserialize<T>(sequence.ToArray(), ContractlessStandardResolver.Instance);
 		}
 
-		public ReadOnlyMemory<byte> Serialize<T>(T obj)
+		public ReadOnlyMemory<byte> Serialize<T>(in T obj)
 		{
 			return MessagePackSerializer.Serialize(obj, ContractlessStandardResolver.Instance);
 		}

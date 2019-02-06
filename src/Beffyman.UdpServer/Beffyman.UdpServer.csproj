@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
-		<!--<TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>-->
+		<TargetFramework>netcoreapp2.2</TargetFramework>
 		<IsPackable>true</IsPackable>
 		<Description>A Microsoft.Extensions.Hosting extension that implements a HostedService that accepts Udp messages into UdpHandlers, abstracting away the socket layer</Description>
 	</PropertyGroup>

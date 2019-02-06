@@ -4,30 +4,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Beffyman.UdpContracts;
 using Beffyman.UdpContracts.Serializers.MessagePack;
-using Beffyman.UdpServer.Internal.ControllerMappers;
-using Beffyman.UdpServer.Test.Dto;
+using Beffyman.UdpServer.Internal.HandlerMapping;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace Beffyman.UdpServer.Test
+namespace Beffyman.UdpServer.Test.Server
 {
-	public class ControllerMapperTests : IDisposable
+	public class HandlerMapperTests : IDisposable
 	{
 		private readonly IServiceProvider _provider;
-		private readonly ILogger<ControllerMapper> _logger;
-		private readonly ControllerMapper _controllerMapper;
+		private readonly ILogger<HandlerMapper> _logger;
+		private readonly HandlerMapper _controllerMapper;
 
 		private readonly IDictionary<LogLevel, ICollection<string>> _events;
 
-		public ControllerMapperTests()
+		public HandlerMapperTests()
 		{
 			_provider = new ServiceCollection().BuildServiceProvider();
 
 			_events = new Dictionary<LogLevel, ICollection<string>>();
 
-			var mockedLogger = new Mock<ILogger<ControllerMapper>>(MockBehavior.Strict);
+			var mockedLogger = new Mock<ILogger<HandlerMapper>>(MockBehavior.Strict);
 			mockedLogger.Setup(x => x.Log<object>(It.IsAny<LogLevel>(), It.IsAny<EventId>(), It.IsAny<object>(), It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()))
 						.Callback((LogLevel logLevel, EventId id, object state, Exception ex, Func<object, Exception, string> formatter) =>
 						{
@@ -39,7 +38,7 @@ namespace Beffyman.UdpServer.Test
 
 			var handlerTypes = new List<Type>();
 
-			_controllerMapper = new ControllerMapper(UdpMessagePackSerializer.Instance, _provider, _logger, new Internal.ControllerRegistry(handlerTypes));
+			_controllerMapper = new HandlerMapper(UdpMessagePackSerializer.Instance, _provider, _logger, new HandlerRegistry(handlerTypes));
 		}
 
 		private void AddEvent(LogLevel level, string msg)
@@ -82,5 +81,18 @@ namespace Beffyman.UdpServer.Test
 
 			Assert.Equal($"No {nameof(UdpHandler<object>)} setup for type {message.Type}, ignoring.", _events[LogLevel.Warning].Single());
 		}
+
+
+
+		#region Dtos
+
+		public class ErrorMessageDto
+		{
+			public int Id { get; set; }
+			public string Value { get; set; }
+
+		}
+
+		#endregion
 	}
 }

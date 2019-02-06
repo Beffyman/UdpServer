@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.IO.Pipelines;
 using System.Threading;
 
-namespace Beffyman.UdpServer.Internal
+namespace Beffyman.UdpServer.Internal.Udp
 {
 	internal sealed class IOQueue : PipeScheduler
 	{

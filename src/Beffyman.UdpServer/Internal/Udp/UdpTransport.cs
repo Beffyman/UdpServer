@@ -8,19 +8,20 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
-using Beffyman.UdpServer.Internal.ControllerMappers;
+using Beffyman.UdpServer.Internal.HandlerMapping;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Beffyman.UdpServer.Internal
+namespace Beffyman.UdpServer.Internal.Udp
 {
 	internal sealed class UdpTransport
 	{
-		private static readonly PipeScheduler[] ThreadPoolSchedulerArray = new PipeScheduler[] { PipeScheduler.ThreadPool };
+		private static readonly PipeScheduler[] ThreadPoolSchedulerArray_Inline = new PipeScheduler[] { PipeScheduler.Inline };
+		private static readonly PipeScheduler[] ThreadPoolSchedulerArray_Pool = new PipeScheduler[] { PipeScheduler.ThreadPool };
 
 		private readonly IApplicationLifetime _appLifetime;
 		private readonly IUdpConfiguration _udpConfiguration;
-		private readonly ControllerMapper _controllerMapper;
+		private readonly HandlerMapper _handlerMapper;
 		private readonly ILogger _logger;
 
 		private readonly MemoryPool<byte> _memoryPool;
@@ -33,35 +34,47 @@ namespace Beffyman.UdpServer.Internal
 		public UdpTransport(
 			IApplicationLifetime applicationLifetime,
 			IUdpConfiguration udpConfiguration,
-			ControllerMapper controllerMapper,
+			HandlerMapper handlerMapper,
 			ILogger<UdpTransport> logger)
 		{
 			Debug.Assert(applicationLifetime != null);
 			Debug.Assert(udpConfiguration != null);
-			Debug.Assert(controllerMapper != null);
+			Debug.Assert(handlerMapper != null);
 			Debug.Assert(logger != null);
 
 			_udpConfiguration = udpConfiguration;
 			_appLifetime = applicationLifetime;
-			_controllerMapper = controllerMapper;
+			_handlerMapper = handlerMapper;
 			_logger = logger;
 
 			_memoryPool = Extensions.GetMemoryPoolFactory();
 
-			if (_udpConfiguration.IOQueueCount > 0)
-			{
-				_numSchedulers = _udpConfiguration.IOQueueCount;
-				_schedulers = new IOQueue[_numSchedulers];
+			var configuration = _udpConfiguration.ThreadExecution;
 
-				for (var i = 0; i < _numSchedulers; i++)
-				{
-					_schedulers[i] = new IOQueue();
-				}
-			}
-			else
+			if (udpConfiguration.IOQueueCount <= 0)
 			{
-				_numSchedulers = ThreadPoolSchedulerArray.Length;
-				_schedulers = ThreadPoolSchedulerArray;
+				configuration = HandlerThreadExecution.ThreadPool;
+			}
+
+			switch (configuration)
+			{
+				case HandlerThreadExecution.Inline:
+					_numSchedulers = ThreadPoolSchedulerArray_Inline.Length;
+					_schedulers = ThreadPoolSchedulerArray_Inline;
+					break;
+				case HandlerThreadExecution.ThreadPool:
+					_numSchedulers = ThreadPoolSchedulerArray_Pool.Length;
+					_schedulers = ThreadPoolSchedulerArray_Pool;
+					break;
+				case HandlerThreadExecution.Dedicated:
+					_numSchedulers = _udpConfiguration.IOQueueCount;
+					_schedulers = new IOQueue[_numSchedulers];
+
+					for (var i = 0; i < _numSchedulers; i++)
+					{
+						_schedulers[i] = new IOQueue();
+					}
+					break;
 			}
 		}
 
@@ -69,12 +82,12 @@ namespace Beffyman.UdpServer.Internal
 		{
 			List<UdpConnection> connections = new List<UdpConnection>();
 
+			IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, _udpConfiguration.ReceivePort);
+
 			for (var schedulerIndex = 0; schedulerIndex < _numSchedulers; schedulerIndex++)
 			{
 				try
 				{
-					IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, _udpConfiguration.Port);
-
 					Socket listenSocket = new Socket(endPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
 
 					Extensions.DisableHandleInheritance(listenSocket);
@@ -82,6 +95,7 @@ namespace Beffyman.UdpServer.Internal
 					listenSocket.ReceiveBufferSize = _udpConfiguration.ReceiveBufferSize;
 					//listenSocket.SendBufferSize = _udpConfiguration.SendBufferSize;
 					listenSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+					listenSocket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
 
 					// Kestrel expects IPv6Any to bind to both IPv6 and IPv4
 					if (endPoint.Address == IPAddress.IPv6Any)
@@ -104,7 +118,7 @@ namespace Beffyman.UdpServer.Internal
 						endPoint = (IPEndPoint)listenSocket.LocalEndPoint;
 					}
 
-					var connection = new UdpConnection(listenSocket, _memoryPool, _schedulers[schedulerIndex], _logger, _controllerMapper);
+					var connection = new UdpConnection(listenSocket, _memoryPool, _schedulers[schedulerIndex], _logger, _handlerMapper);
 					connections.Add(connection);
 
 					// REVIEW: This task should be tracked by the server for graceful shutdown
@@ -118,7 +132,7 @@ namespace Beffyman.UdpServer.Internal
 				}
 			}
 
-			_logger.LogInformation($"Started listening on port {_udpConfiguration.Port.ToString()} with {_numSchedulers.ToString()} listeners.", null);
+			_logger.LogInformation($"Started listening to {endPoint.ToString()} with {_numSchedulers.ToString()} listeners.", null);
 
 			_connections = connections;
 
@@ -148,7 +162,7 @@ namespace Beffyman.UdpServer.Internal
 				}
 			}
 
-			_logger.LogInformation($"Stopped listening on port {_udpConfiguration.Port.ToString()}. {_numSchedulers.ToString()} listeners have been closed.", null);
+			_logger.LogInformation($"Stopped listening on port {_udpConfiguration.ReceivePort.ToString()}. {_numSchedulers.ToString()} listeners have been closed.", null);
 
 			_unbinding = false;
 

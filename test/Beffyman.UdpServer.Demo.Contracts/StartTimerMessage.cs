@@ -6,7 +6,7 @@ namespace Beffyman.UdpServer.Demo.Contracts
 {
 	public class StartTimerMessage
 	{
-		public readonly int ExpectedMessages;
+		public int ExpectedMessages;
 
 		public StartTimerMessage() { }
 

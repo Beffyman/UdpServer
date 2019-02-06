@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Beffyman.UdpContracts.Serializers;
-using Beffyman.UdpServer.Internal;
-using Beffyman.UdpServer.Internal.ControllerMappers;
+using Beffyman.UdpServer.Internal.HandlerMapping;
+using Beffyman.UdpServer.Internal.Udp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,24 +15,23 @@ namespace Beffyman.UdpServer
 {
 	public static class UdpHostBuilder
 	{
-
-		public static IHostBuilder CreateDefaultBuilder()
-		{
-			return CreateDefaultBuilder(null, null);
-		}
-
-		public static IHostBuilder CreateDefaultBuilder(Action<IUdpConfiguration> udpConfiguration = null)
+		public static IHostBuilder CreateDefaultBuilder(Action<IUdpConfiguration> udpConfiguration)
 		{
 			return CreateDefaultBuilder(null, udpConfiguration);
 		}
 
-		public static IHostBuilder CreateDefaultBuilder(string[] args, Action<IUdpConfiguration> udpConfiguration = null)
+		public static IHostBuilder CreateDefaultBuilder(string[] args, Action<IUdpConfiguration> udpConfiguration)
 		{
 			var udpConfig = new UdpConfiguration();
 
 			if (udpConfiguration != null)
 			{
 				udpConfiguration.Invoke(udpConfig);
+			}
+
+			if (udpConfig.Serializer == null)
+			{
+				ThrowArgumentNullException($"{nameof(IUdpConfiguration)}.{nameof(IUdpConfiguration.Serializer)}");
 			}
 
 			if (!typeof(ISerializer).IsAssignableFrom(udpConfig.Serializer))
@@ -50,13 +48,22 @@ namespace Beffyman.UdpServer
 					services.AddSingleton(typeof(ISerializer), udpConfig.Serializer);
 				})
 				.ConfigureServices(ConfigureServices)
-				.ConfigureLogging(ConfigureLogging)
 				.UseConsoleLifetime();
+		}
+
+		public static IHostBuilder UseDefaultLogging(this IHostBuilder builder)
+		{
+			return builder.ConfigureLogging(ConfigureLogging);
 		}
 
 		private static void ThrowInvalidSerializerType(Type serializerType)
 		{
 			throw new InvalidOperationException($"{serializerType.FullName} does not implement {nameof(ISerializer)}");
+		}
+
+		private static void ThrowArgumentNullException(string name)
+		{
+			throw new ArgumentNullException($"{name} has not been assigned a value, please use {nameof(IUdpConfiguration.UseSerializer)}");
 		}
 
 		private static Action<IConfigurationBuilder> ConfigureHostConfiguration(string[] args)
@@ -93,7 +100,7 @@ namespace Beffyman.UdpServer
 		private static void ConfigureServices(IServiceCollection services)
 		{
 			services.AddOptions()
-				.AddSingleton<ControllerMapper>()
+				.AddSingleton<HandlerMapper>()
 				.AddSingleton<UdpTransport>()
 				.AddHostedService<UdpHostedService>();
 		}
@@ -115,7 +122,7 @@ namespace Beffyman.UdpServer
 				services.AddScoped(handler);
 			}
 
-			services.AddSingleton<ControllerRegistry>(new ControllerRegistry(handlers));
+			services.AddSingleton<HandlerRegistry>(new HandlerRegistry(handlers));
 
 			return services;
 		}
