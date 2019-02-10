@@ -1,4 +1,6 @@
 # Get the executing directory and set it to the current directory.
+$ErrorActionPreference = "Stop"
+
 $scriptBin = ""
 Try { $scriptBin = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)" } Catch {}
 If ([string]::IsNullOrEmpty($scriptBin)) { $scriptBin = $pwd }
@@ -52,8 +54,20 @@ CreateArtifactsFolder | Out-Host;
 Write-Host "=====Build=====" -ForegroundColor Magenta;
 dotnet build -c Release;
 
+if($lastexitcode -eq 1){
+	throw "Build Failed"
+}
+
 Write-Host "====Test====" -ForegroundColor Magenta;
-dotnet test -c Release;
+dotnet test -c Release /p:CollectCoverage=true /p:CoverletOutputFormat="opencover" /p:CoverletOutput="$artifacts/";
+
+if($lastexitcode -eq 1){
+	throw "Tests Failed"
+}
 
 Write-Host "=====Pack====" -ForegroundColor Magenta;
 dotnet pack -c Release -o $artifacts -p:PackageVersion="$version";
+
+if($lastexitcode -eq 1){
+	throw "Pack Failed"
+}

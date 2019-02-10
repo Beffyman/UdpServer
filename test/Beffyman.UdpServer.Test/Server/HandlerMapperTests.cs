@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Beffyman.UdpContracts;
 using Beffyman.UdpContracts.Serializers.MessagePack;
@@ -59,9 +60,12 @@ namespace Beffyman.UdpServer.Test.Server
 		[Fact]
 		public async Task InvalidByteFormat()
 		{
-			var buffer = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			var bytes = new byte[17] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-			await _controllerMapper.HandleAsync(buffer);
+			var buffer = Beffyman.UdpServer.Internal.Extensions.WriteAddressToSpan(9, IPAddress.Loopback, bytes);
+
+
+			await _controllerMapper.HandleAsync(bytes);
 
 			Assert.Equal($"Failed to deserialize incoming bytes to a {nameof(UdpMessage)}", _events[LogLevel.Trace].Single());
 		}
@@ -77,7 +81,14 @@ namespace Beffyman.UdpServer.Test.Server
 
 			var dgram = message.ToDgram(UdpMessagePackSerializer.Instance);
 
-			await _controllerMapper.HandleAsync(dgram.Data);
+			var array = new byte[dgram.Length + 8];
+
+			dgram.Data.CopyTo(array);
+
+			var buffer = Beffyman.UdpServer.Internal.Extensions.WriteAddressToSpan(dgram.Length, IPAddress.Loopback, array);
+
+
+			await _controllerMapper.HandleAsync(array);
 
 			Assert.Equal($"No {nameof(UdpHandler<object>)} setup for type {message.Type}, ignoring.", _events[LogLevel.Warning].Single());
 		}

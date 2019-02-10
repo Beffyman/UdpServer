@@ -1,0 +1,62 @@
+
+Machine CPU: i7-8700 4.6GHz 6-Core
+
+
+
+Application started. Press Ctrl+C to shut down.
+infoHosting environment: Development
+Content root path: C:\Git_Github\UdpServer\test\Beffyman.UdpServer.Demo\bin\Release\netcoreapp2.2\
+: Beffyman.UdpServer.Internal.Udp.UdpTransport[0]
+      Started listening to 0.0.0.0:6002 with 12 listeners.
+info: Beffyman.UdpServer.Demo.Services.CounterService[0]
+      ---------------------------------------------------------------------
+        Expected 100 messages.
+        Handled 100 messages.
+        Elapsed time is 0.0097716.
+        0% messages dropped.
+        10233.74 Messages/sec
+        13490 bytes
+        1330.39 megabytes/sec
+      ---------------------------------------------------------------------
+info: Beffyman.UdpServer.Demo.Services.CounterService[0]
+      ---------------------------------------------------------------------
+        Expected 1000 messages.
+        Handled 1000 messages.
+        Elapsed time is 0.0213644.
+        0% messages dropped.
+        46806.84 Messages/sec
+        137506 bytes
+        6272.12 megabytes/sec
+      ---------------------------------------------------------------------
+info: Beffyman.UdpServer.Demo.Services.CounterService[0]
+      ---------------------------------------------------------------------
+        Expected 10000 messages.
+        Handled 10000 messages.
+        Elapsed time is 0.1172424.
+        0% messages dropped.
+        85293.38 Messages/sec
+        1388506 bytes
+        11557.25 megabytes/sec
+      ---------------------------------------------------------------------
+info: Beffyman.UdpServer.Demo.Services.CounterService[0]
+      ---------------------------------------------------------------------
+        Expected 100000 messages.
+        Handled 100000 messages.
+        Elapsed time is 1.0505689.
+        0% messages dropped.
+        95186.52 Messages/sec
+        14057434 bytes
+        13066.25 megabytes/sec
+      ---------------------------------------------------------------------
+info: Beffyman.UdpServer.Demo.Services.CounterService[0]
+      ---------------------------------------------------------------------
+        Expected 1000000 messages.
+        Handled 1000000 messages.
+        Elapsed time is 10.3753987.
+        0% messages dropped.
+        96381.84 Messages/sec
+        142757434 bytes
+        13436.69 megabytes/sec
+      ---------------------------------------------------------------------
+info: Beffyman.UdpServer.Internal.Udp.UdpTransport[0]
+      Stopped listening on port 6002. 12 listeners have been closed.

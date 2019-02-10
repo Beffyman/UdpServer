@@ -2,17 +2,46 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using Beffyman.UdpServer.Internal.Memory;
+using Beffyman.UdpServer.Internal.Udp;
 using Microsoft.Extensions.Logging;
 
 namespace Beffyman.UdpServer.Internal
 {
 	internal static class Extensions
 	{
+		public static int WriteAddressToSpan(int packetBytes, in IPAddress ipAddress, in Span<byte> buffer)
+		{
+			int index = packetBytes;
+			//Then we convert the sender address into a byte array
+			var addressBytes = ipAddress.GetAddressBytes();
+
+			//Then we write the sender address into the buffer
+			for (int i = 0; i < addressBytes.Length; i++)
+			{
+				buffer[index + i] = addressBytes[i];
+			}
+
+			//Then we get the byte array for the length of the address bytes
+			var lengthBytes = new Int32Converter(addressBytes.Length);
+
+			//And then write the length onto the end of the buffer
+			buffer[index + addressBytes.Length + 0] = lengthBytes.Byte1;
+			buffer[index + addressBytes.Length + 1] = lengthBytes.Byte2;
+			buffer[index + addressBytes.Length + 2] = lengthBytes.Byte3;
+			buffer[index + addressBytes.Length + 3] = lengthBytes.Byte4;
+
+			//We always know the last 4 are the length of the address, then we can splice up and get the address and then the rest above it is the data
+			return index + addressBytes.Length + 4;
+		}
+
+
+
 		[DllImport("kernel32.dll", SetLastError = true)]
 		private static extern bool SetHandleInformation(IntPtr hObject, HANDLE_FLAGS dwMask, HANDLE_FLAGS dwFlags);
 
