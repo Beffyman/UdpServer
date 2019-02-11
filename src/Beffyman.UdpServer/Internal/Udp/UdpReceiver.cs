@@ -30,6 +30,5 @@ namespace Beffyman.UdpServer.Internal.Udp
 
 			return _awaitableEventArgs;
 		}
-
 	}
 }

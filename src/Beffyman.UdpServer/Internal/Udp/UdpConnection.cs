@@ -134,13 +134,6 @@ namespace Beffyman.UdpServer.Internal.Udp
 		{
 			while (true)
 			{
-				//// MacOS blocked on https://github.com/dotnet/corefx/issues/31766
-				//if (!IsMacOS)
-				//{
-				//	// Wait for data before allocating a buffer.
-				//	await _receiver.WaitForDataAsync();
-				//}
-
 				// Ensure we have some reasonable amount of buffer space
 				var buffer = ReceiverPipe.GetMemory(_socket.ReceiveBufferSize);
 
