@@ -16,8 +16,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="..\..\DOCKERFILE.demo">
-	    <Link>DOCKERFILE.demo</Link>
-	  </Content>
+		<Content Include="..\..\DOCKERFILE.demo">
+			<Link>DOCKERFILE.demo</Link>
+		</Content>
 	</ItemGroup>
 </Project>
