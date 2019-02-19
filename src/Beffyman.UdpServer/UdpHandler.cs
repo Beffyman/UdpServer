@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Beffyman.UdpContracts.Serializers;
 using Beffyman.UdpServer.Internal.HandlerMapping;
+using Beffyman.UdpServer.Internal.Udp;
 
 namespace Beffyman.UdpServer
 {
 	public abstract class UdpHandler<T>
 	{
 		protected int Bytes { get; private set; }
-		protected IPAddress Sender { get; private set; }
+		protected IUdpSender Sender { get; private set; }
 
 		internal void SetInfo(in HandlerInfo info)
 		{

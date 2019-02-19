@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using Beffyman.UdpContracts;
+using Beffyman.UdpServer.Internal.Udp;
 
 namespace Beffyman.UdpServer.Internal.HandlerMapping
 {
@@ -10,16 +11,16 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 	{
 		public readonly int Bytes;
 		public readonly ReadOnlyMemory<byte> Data;
-		public readonly IPAddress Sender;
+		public readonly IUdpSender Sender;
 
-		public HandlerInfo(int bytes, in ReadOnlyMemory<byte> data, in IPAddress sender)
+		public HandlerInfo(int bytes, in ReadOnlyMemory<byte> data, in IUdpSender sender)
 		{
 			Bytes = bytes;
 			Data = data;
 			Sender = sender;
 		}
 
-		public HandlerInfo(in Datagram dgram, in IPAddress sender)
+		public HandlerInfo(in Datagram dgram, in IUdpSender sender)
 		{
 			Bytes = dgram.Length;
 			Data = dgram.Data;

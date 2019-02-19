@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Beffyman.UdpContracts;
 using Beffyman.UdpContracts.Serializers.MessagePack;
 using Beffyman.UdpServer.Internal.HandlerMapping;
+using Beffyman.UdpServer.Internal.Udp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -18,11 +19,23 @@ namespace Beffyman.UdpServer.Test.Server
 		private readonly IServiceProvider _provider;
 		private readonly ILogger<HandlerMapper> _logger;
 		private readonly HandlerMapper _controllerMapper;
+		private readonly IUdpConfiguration _configuration;
+		private readonly IUdpSenderFactory _senderFactory;
+
 
 		private readonly IDictionary<LogLevel, ICollection<string>> _events;
 
 		public HandlerMapperTests()
 		{
+			var configuration = new Mock<IUdpConfiguration>();
+			configuration.Setup(x => x.SendPort).Returns(6200);
+			configuration.Setup(x => x.SendBufferSize).Returns(250000);
+			_configuration = configuration.Object;
+
+			var senderFactory = new Mock<IUdpSenderFactory>();
+			senderFactory.Setup(x => x.GetSender(It.IsAny<IPAddress>())).Returns((IUdpSender)default);
+			_senderFactory = senderFactory.Object;
+
 			_provider = new ServiceCollection().BuildServiceProvider();
 
 			_events = new Dictionary<LogLevel, ICollection<string>>();
@@ -39,7 +52,7 @@ namespace Beffyman.UdpServer.Test.Server
 
 			var handlerTypes = new List<Type>();
 
-			_controllerMapper = new HandlerMapper(UdpMessagePackSerializer.Instance, _provider, _logger, new HandlerRegistry(handlerTypes));
+			_controllerMapper = new HandlerMapper(UdpMessagePackSerializer.Instance, _provider, _logger, _senderFactory, new HandlerRegistry(handlerTypes));
 		}
 
 		private void AddEvent(LogLevel level, string msg)

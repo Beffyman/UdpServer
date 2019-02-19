@@ -9,15 +9,21 @@ namespace Beffyman.UdpServer
 		/// Port the udp socket will listen on. Default value is 6100
 		/// </summary>
 		ushort ReceivePort { get; set; }
+
 		/// <summary>
 		/// Buffer for incoming messages, if it is too small, the incoming requests will be dropped which will show up as packet loss. Default Value is 2.5e+7
 		/// </summary>
 		int ReceiveBufferSize { get; set; }
 
+		/// <summary>
+		/// Port the udp socket will send back on.
+		/// </summary>
+		ushort SendPort { get; set; }
+
 		///// <summary>
 		///// Buffer for outgoing messages, if it is too small, the outgoing requests will be dropped
 		///// </summary>
-		//int SendBufferSize { get; set; }
+		int SendBufferSize { get; set; }
 
 		/// <summary>
 		/// How many sockets are listening on the port. Default is Math.Min(Environment.ProcessorCount, 16).  Setting this to 0 will default to the ThreadPool
@@ -40,6 +46,8 @@ namespace Beffyman.UdpServer
 
 	internal sealed class UdpConfiguration : IUdpConfiguration
 	{
+		public ushort SendPort { get; set; } = 6200;
+		public int SendBufferSize { get; set; } = (int)2.5e+7;
 		public ushort ReceivePort { get; set; } = 6100;
 		public int ReceiveBufferSize { get; set; } = (int)2.5e+7;//25_000_000
 																 //public int SendBufferSize { get; set; } = 131071;

@@ -20,18 +20,21 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 		private readonly ILogger _logger;
 		private readonly IServiceProvider _provider;
 		private readonly HandlerRegistry _controllerRegistry;
+		private readonly IUdpSenderFactory _senderFactory;
 
 		private readonly IDictionary<string, HandlerMapping> _mappings;
 
 		public HandlerMapper(ISerializer serializer,
 			IServiceProvider provider,
 			ILogger<HandlerMapper> logger,
+			IUdpSenderFactory senderFactory,
 			HandlerRegistry controllerRegistry)
 		{
 			_serializer = serializer;
 			_logger = logger;
 			_provider = provider;
 			_controllerRegistry = controllerRegistry;
+			_senderFactory = senderFactory;
 
 			_mappings = _controllerRegistry.Handlers.Select(x => new HandlerMapping(x)).ToDictionary(x => x.MessageType, y => y);
 		}
@@ -77,7 +80,7 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 					return;
 				}
 
-				var info = new HandlerInfo(messageBuffer.Length, message.Data, address);
+				var info = new HandlerInfo(messageBuffer.Length, message.Data, _senderFactory.GetSender(address));
 
 				using (var scope = _provider.CreateScope())
 				{

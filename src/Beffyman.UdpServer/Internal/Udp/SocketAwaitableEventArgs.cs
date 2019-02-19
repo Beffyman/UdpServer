@@ -58,7 +58,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 			OnCompleted(this);
 		}
 
-		protected override void OnCompleted(SocketAsyncEventArgs _)
+		protected override void OnCompleted(SocketAsyncEventArgs e)
 		{
 			var continuation = Interlocked.Exchange(ref _callback, _callbackCompleted);
 

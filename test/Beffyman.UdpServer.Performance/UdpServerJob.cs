@@ -14,6 +14,7 @@ using Beffyman.UdpContracts.Serializers.NewtonsoftJson;
 using Beffyman.UdpServer.Internal.HandlerMapping;
 using Beffyman.UdpServer.Performance.Handlers;
 using Beffyman.UdpContracts.Serializers;
+using Beffyman.UdpServer.Internal.Udp;
 
 namespace Beffyman.UdpServer.Performance
 {
@@ -37,7 +38,7 @@ namespace Beffyman.UdpServer.Performance
 			_serializer = UdpMessagePackSerializer.Instance;
 			_dgram = UdpMessage.Create(new SmallMessage(10), _serializer).ToDgram(_serializer);
 			_handler = new SmallMessageHandler();
-			_handlerInfo = new HandlerInfo(_dgram, IPAddress.Loopback);
+			_handlerInfo = new HandlerInfo(_dgram, null);
 		}
 
 		[GlobalCleanup]

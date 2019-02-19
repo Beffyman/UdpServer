@@ -58,9 +58,9 @@ namespace Beffyman.UdpServer.Internal.Memory
 		/// </summary>
 		private const int AnySize = -1;
 
-		public override IMemoryOwner<byte> Rent(int size = AnySize)
+		public override IMemoryOwner<byte> Rent(int minBufferSize = AnySize)
 		{
-			if (size > _blockSize)
+			if (minBufferSize > _blockSize)
 			{
 				Extensions.ThrowArgumentOutOfRangeException_BufferRequestTooLarge(_blockSize);
 			}

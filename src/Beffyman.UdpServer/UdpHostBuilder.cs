@@ -102,6 +102,7 @@ namespace Beffyman.UdpServer
 			services.AddOptions()
 				.AddSingleton<HandlerMapper>()
 				.AddSingleton<UdpTransport>()
+				.AddSingleton<IUdpSenderFactory, UdpSenderFactory>()
 				.AddHostedService<UdpHostedService>();
 		}
 
