@@ -54,20 +54,20 @@ CreateArtifactsFolder | Out-Host;
 Write-Host "=====Build=====" -ForegroundColor Magenta;
 dotnet build -c Release;
 
-if($lastexitcode -eq 1){
+if($lastexitcode -ne 0){
 	throw "Build Failed"
 }
 
 Write-Host "====Test====" -ForegroundColor Magenta;
 dotnet test -c Release /p:CollectCoverage=true /p:CoverletOutputFormat="opencover" /p:CoverletOutput="$artifacts/";
 
-if($lastexitcode -eq 1){
+if($lastexitcode -ne 0){
 	throw "Tests Failed"
 }
 
 Write-Host "=====Pack====" -ForegroundColor Magenta;
 dotnet pack -c Release -o $artifacts -p:PackageVersion="$version";
 
-if($lastexitcode -eq 1){
+if($lastexitcode -ne 0){
 	throw "Pack Failed"
 }
