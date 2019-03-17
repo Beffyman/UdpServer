@@ -25,6 +25,9 @@ namespace Beffyman.UdpServer.Internal.Udp
 		private PipeWriter ReceiverPipe => _pipe.Writer;
 		private PipeReader ReaderPipe => _pipe.Reader;
 
+		public MemoryPool<byte> MemoryPool { get; }
+		public PipeScheduler Scheduler { get; }
+
 
 		private readonly Socket _socket;
 		private readonly ILogger _logger;
@@ -64,9 +67,6 @@ namespace Beffyman.UdpServer.Internal.Udp
 
 			_receiver = new UdpReceiver(_socket, awaiterScheduler);
 		}
-
-		public MemoryPool<byte> MemoryPool { get; }
-		public PipeScheduler Scheduler { get; }
 
 		public async Task StartAsync()
 		{
@@ -135,7 +135,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 			while (true)
 			{
 				// Ensure we have some reasonable amount of buffer space
-				var buffer = ReceiverPipe.GetMemory(_socket.ReceiveBufferSize);
+				var buffer = ReceiverPipe.GetMemory(MemoryPool.MaxBufferSize);
 
 				var bytesReceived = await _receiver.ReceiveAsync(buffer);
 
