@@ -15,7 +15,7 @@ namespace Beffyman.UdpServer.Internal
 {
 	internal static class Extensions
 	{
-		public static int WriteAddressToSpan(int packetBytes, in IPAddress ipAddress, in Span<byte> buffer)
+		public static int WriteAddressToSpan(in int packetBytes, in IPAddress ipAddress, in Span<byte> buffer)
 		{
 			int index = packetBytes;
 			//Then we convert the sender address into a byte array
@@ -43,7 +43,7 @@ namespace Beffyman.UdpServer.Internal
 
 
 		[DllImport("kernel32.dll", SetLastError = true)]
-		private static extern bool SetHandleInformation(IntPtr hObject, HANDLE_FLAGS dwMask, HANDLE_FLAGS dwFlags);
+		private static extern bool SetHandleInformation(in IntPtr hObject, HANDLE_FLAGS dwMask, HANDLE_FLAGS dwFlags);
 
 		[Flags]
 		private enum HANDLE_FLAGS : uint
@@ -101,7 +101,7 @@ namespace Beffyman.UdpServer.Internal
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void ThrowArgumentOutOfRangeException(int sourceLength, int offset)
+		public static void ThrowArgumentOutOfRangeException(in int sourceLength, in int offset)
 		{
 
 			if ((uint)offset > (uint)sourceLength)
@@ -115,7 +115,7 @@ namespace Beffyman.UdpServer.Internal
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		internal static void ThrowArgumentOutOfRangeException_BufferRequestTooLarge(int blockSize)
+		internal static void ThrowArgumentOutOfRangeException_BufferRequestTooLarge(in int blockSize)
 		{
 			throw new ArgumentOutOfRangeException(GetArgumentName(ExceptionArgument.size), $"Cannot allocate more than {blockSize.ToString()} bytes in a single buffer");
 		}

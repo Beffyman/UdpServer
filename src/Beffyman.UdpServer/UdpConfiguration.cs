@@ -47,10 +47,10 @@ namespace Beffyman.UdpServer
 	internal sealed class UdpConfiguration : IUdpConfiguration
 	{
 		public ushort SendPort { get; set; } = 6200;
-		public int SendBufferSize { get; set; } = (int)2.5e+7;
+		public int SendBufferSize { get; set; } = (int)2.5e+5;
 		public ushort ReceivePort { get; set; } = 6100;
-		public int ReceiveBufferSize { get; set; } = (int)2.5e+7;//25_000_000
-																 //public int SendBufferSize { get; set; } = 131071;
+		public int ReceiveBufferSize { get; set; } = (int)2.5e+5;//250_000
+
 		public int IOQueueCount { get; set; } = Math.Min(Environment.ProcessorCount, 16);
 
 		public HandlerThreadExecution ThreadExecution { get; set; } = HandlerThreadExecution.Dedicated;

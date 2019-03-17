@@ -9,9 +9,9 @@ namespace Beffyman.UdpServer.Demo.Services
 {
 	public interface ICounterService
 	{
-		void Start(int expected);
+		void Start(in int expected);
 		void Stop();
-		void Count(int bytes);
+		void Count(in int bytes);
 	}
 
 	public class CounterService : ICounterService
@@ -28,13 +28,13 @@ namespace Beffyman.UdpServer.Demo.Services
 			_logger = logger;
 		}
 
-		public void Start(int expected)
+		public void Start(in int expected)
 		{
 			_expected = expected;
 			_timer.Start();
 		}
 
-		public void Count(int bytes)
+		public void Count(in int bytes)
 		{
 			_size += bytes;
 			_count++;
