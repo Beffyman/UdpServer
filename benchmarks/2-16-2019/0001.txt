@@ -1,4 +1,4 @@
-
+Runtime Net Core 2.2
 Machine CPU: Ryzen 7 2700X 3.7GHz
 
 

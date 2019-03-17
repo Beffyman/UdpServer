@@ -9,9 +9,9 @@ namespace Beffyman.UdpServer.Demo.Handlers
 {
 	public sealed class ShutDownMessageHandler : UdpHandler<ShutdownMessage>
 	{
-		private readonly IHostApplicationLifetime _applicationLifetime;
+		private readonly IApplicationLifetime _applicationLifetime;
 
-		public ShutDownMessageHandler(IHostApplicationLifetime applicationLifetime)
+		public ShutDownMessageHandler(IApplicationLifetime applicationLifetime)
 		{
 			_applicationLifetime = applicationLifetime;
 		}
