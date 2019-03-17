@@ -41,7 +41,7 @@ function GetVersion{
 
 	if($localBuild -eq $true){
 		$build = & git rev-list --count HEAD;
-		$Global:version = "$($version)$build";
+		$Global:version = "$($version)+$build";
 	}
 
 
@@ -66,7 +66,7 @@ if($lastexitcode -ne 0){
 }
 
 Write-Host "=====Pack====" -ForegroundColor Magenta;
-dotnet pack -c Release -o $artifacts -p:PackageVersion="$version";
+dotnet pack -c Release -o $artifacts -p:PackageVersion="$version" -p:NoPackageAnalysis=true;
 
 if($lastexitcode -ne 0){
 	throw "Pack Failed"

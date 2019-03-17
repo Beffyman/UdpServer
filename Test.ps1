@@ -23,8 +23,8 @@ dotnet run -c Release;
 
 cd $prevPwd;
 
-Write-Host "" -ForegroundColor Green;
-Write-Host "Starting Performance" -ForegroundColor Green;
-cd $performance
+#Write-Host "" -ForegroundColor Green;
+#Write-Host "Starting Performance" -ForegroundColor Green;
+#cd $performance
 
-dotnet run -c Release;
+#dotnet run -c Release;

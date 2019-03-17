@@ -6,8 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer", "src\Beffyman.UdpServer\Beffyman.UdpServer.csproj", "{94C3AE3E-3007-449E-9F04-B5D9D3825A58}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2D7F1212-AA60-4386-A8D2-B156030B308A}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{742F1E49-C1FD-4A69-87E3-AC73A6B8B679}"
+	ProjectSection(SolutionItems) = preProject
+		test\Directory.Build.props = test\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Test", "test\Beffyman.UdpServer.Test\Beffyman.UdpServer.Test.csproj", "{AAB0F2DE-19E6-4DDF-8448-564F596DCD28}"
 EndProject
