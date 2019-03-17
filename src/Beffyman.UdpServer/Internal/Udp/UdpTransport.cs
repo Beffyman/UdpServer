@@ -19,7 +19,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 		private static readonly PipeScheduler[] ThreadPoolSchedulerArray_Inline = new PipeScheduler[] { PipeScheduler.Inline };
 		private static readonly PipeScheduler[] ThreadPoolSchedulerArray_Pool = new PipeScheduler[] { PipeScheduler.ThreadPool };
 
-		private readonly IApplicationLifetime _appLifetime;
+		private readonly IHostApplicationLifetime _appLifetime;
 		private readonly IUdpConfiguration _udpConfiguration;
 		private readonly HandlerMapper _handlerMapper;
 		private readonly ILogger _logger;
@@ -32,7 +32,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 		private volatile bool _unbinding;
 
 		public UdpTransport(
-			IApplicationLifetime applicationLifetime,
+			IHostApplicationLifetime applicationLifetime,
 			IUdpConfiguration udpConfiguration,
 			HandlerMapper handlerMapper,
 			ILogger<UdpTransport> logger)
