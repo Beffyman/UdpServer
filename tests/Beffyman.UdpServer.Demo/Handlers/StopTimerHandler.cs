@@ -7,18 +7,18 @@ using Beffyman.UdpServer.Demo.Services;
 
 namespace Beffyman.UdpServer.Demo.Handlers
 {
-	public class StartTimerHandler : UdpHandler<StartTimerMessage>
+	public sealed class StopTimerHandler : UdpHandler<StopTimerMessage>
 	{
 		private readonly ICounterService _counterService;
 
-		public StartTimerHandler(ICounterService counterService)
+		public StopTimerHandler(ICounterService counterService)
 		{
 			_counterService = counterService;
 		}
 
-		public override ValueTask HandleAsync(in StartTimerMessage request)
+		public override ValueTask HandleAsync(in StopTimerMessage request)
 		{
-			_counterService.Start(request.ExpectedMessages);
+			_counterService.Stop();
 			return new ValueTask(Task.CompletedTask);
 		}
 	}

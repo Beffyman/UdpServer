@@ -12,38 +12,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2D7F1212-AA6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{742F1E49-C1FD-4A69-87E3-AC73A6B8B679}"
 	ProjectSection(SolutionItems) = preProject
-		test\Directory.Build.props = test\Directory.Build.props
+		tests\Directory.Build.props = tests\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Test", "test\Beffyman.UdpServer.Test\Beffyman.UdpServer.Test.csproj", "{AAB0F2DE-19E6-4DDF-8448-564F596DCD28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Test", "tests\Beffyman.UdpServer.Test\Beffyman.UdpServer.Test.csproj", "{AAB0F2DE-19E6-4DDF-8448-564F596DCD28}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Demo", "test\Beffyman.UdpServer.Demo\Beffyman.UdpServer.Demo.csproj", "{7728C2E1-C470-43ED-9764-91BEC27C400F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Demo", "tests\Beffyman.UdpServer.Demo\Beffyman.UdpServer.Demo.csproj", "{7728C2E1-C470-43ED-9764-91BEC27C400F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{42172268-FC3F-4644-B482-4D3CB177C398}"
 	ProjectSection(SolutionItems) = preProject
-		.dockerignore = .dockerignore
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		after.Beffyman.UdpServer.sln.targets = after.Beffyman.UdpServer.sln.targets
-		appveyor.yml = appveyor.yml
-		Build.ps1 = Build.ps1
-		Clean.ps1 = Clean.ps1
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
-		docker-demo.ps1 = docker-demo.ps1
-		global.json = global.json
 		LICENSE = LICENSE
 		README.md = README.md
-		Test.ps1 = Test.ps1
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Demo.Client", "test\Beffyman.UdpServer.Demo.Client\Beffyman.UdpServer.Demo.Client.csproj", "{FB466D5D-B2E0-45A2-B897-D121385C7207}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Demo.Client", "tests\Beffyman.UdpServer.Demo.Client\Beffyman.UdpServer.Demo.Client.csproj", "{FB466D5D-B2E0-45A2-B897-D121385C7207}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Demo.Contracts", "test\Beffyman.UdpServer.Demo.Contracts\Beffyman.UdpServer.Demo.Contracts.csproj", "{F8172DDF-6F83-46E5-BE5E-1079845A39BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Demo.Contracts", "tests\Beffyman.UdpServer.Demo.Contracts\Beffyman.UdpServer.Demo.Contracts.csproj", "{F8172DDF-6F83-46E5-BE5E-1079845A39BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpContracts", "src\Beffyman.UdpContracts\Beffyman.UdpContracts.csproj", "{B7C4B448-AF2A-40D4-A7D7-3451D7CAA012}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Performance", "test\Beffyman.UdpServer.Performance\Beffyman.UdpServer.Performance.csproj", "{D67E45CE-E985-4876-A6F2-C19C44901E5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpServer.Performance", "tests\Beffyman.UdpServer.Performance\Beffyman.UdpServer.Performance.csproj", "{D67E45CE-E985-4876-A6F2-C19C44901E5D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpContracts.Serializers", "src\Beffyman.UdpContracts.Serializers\Beffyman.UdpContracts.Serializers.csproj", "{24EB4CD8-5266-49C5-8C7D-B2AB4EFB1E97}"
 EndProject
@@ -52,6 +44,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpContracts.Serializers.NewtonsoftJson", "src\Beffyman.UdpContracts.Serializers.NewtonsoftJson\Beffyman.UdpContracts.Serializers.NewtonsoftJson.csproj", "{689FAE07-D24A-44F0-9D79-E15518ED1151}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.UdpContracts.Serializers.Utf8Json", "src\Beffyman.UdpContracts.Serializers.Utf8Json\Beffyman.UdpContracts.Serializers.Utf8Json.csproj", "{1CBE2E30-DD59-4482-8267-278D9471773D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{B05711BB-F2BB-4B9D-9BFD-2629D80A5970}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{5C00FC50-EC72-4D9E-8B2F-E83CEBDEBC9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +99,8 @@ Global
 		{1CBE2E30-DD59-4482-8267-278D9471773D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CBE2E30-DD59-4482-8267-278D9471773D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CBE2E30-DD59-4482-8267-278D9471773D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B05711BB-F2BB-4B9D-9BFD-2629D80A5970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B05711BB-F2BB-4B9D-9BFD-2629D80A5970}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +117,7 @@ Global
 		{FC6B129D-4882-49D8-9A4F-AA5A39A786D0} = {2D7F1212-AA60-4386-A8D2-B156030B308A}
 		{689FAE07-D24A-44F0-9D79-E15518ED1151} = {2D7F1212-AA60-4386-A8D2-B156030B308A}
 		{1CBE2E30-DD59-4482-8267-278D9471773D} = {2D7F1212-AA60-4386-A8D2-B156030B308A}
+		{B05711BB-F2BB-4B9D-9BFD-2629D80A5970} = {5C00FC50-EC72-4D9E-8B2F-E83CEBDEBC9D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1C30877-C4F2-4BA2-A04A-60CF8E49AC97}
