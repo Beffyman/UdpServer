@@ -13,14 +13,14 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 		public readonly ReadOnlyMemory<byte> Data;
 		public readonly IUdpSender Sender;
 
-		public HandlerInfo(int bytes, in ReadOnlyMemory<byte> data, in IUdpSender sender)
+		public HandlerInfo(in int bytes, in ReadOnlyMemory<byte> data, IUdpSender sender)
 		{
 			Bytes = bytes;
 			Data = data;
 			Sender = sender;
 		}
 
-		public HandlerInfo(in Datagram dgram, in IUdpSender sender)
+		public HandlerInfo(in Datagram dgram, IUdpSender sender)
 		{
 			Bytes = dgram.Length;
 			Data = dgram.Data;

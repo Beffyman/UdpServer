@@ -9,7 +9,7 @@ namespace Beffyman.UdpContracts.Serializers.NewtonsoftJson
 	{
 		public static readonly UdpNewtonsoftJsonSerializer Instance = new UdpNewtonsoftJsonSerializer();
 
-		public object Deserialize(in ReadOnlyMemory<byte> sequence, in Type type)
+		public object Deserialize(in ReadOnlyMemory<byte> sequence, Type type)
 		{
 			using (var stream = new MemoryStream(sequence.ToArray()))
 			using (var reader = new StreamReader(stream, Encoding.UTF8))
@@ -24,7 +24,7 @@ namespace Beffyman.UdpContracts.Serializers.NewtonsoftJson
 				return JsonSerializer.Create().Deserialize<T>(jsonReader);
 		}
 
-		public ReadOnlyMemory<byte> Serialize<T>(in T obj)
+		public ReadOnlyMemory<byte> Serialize<T>(T obj)
 		{
 			var stream = new MemoryStream();
 			var writer = new StreamWriter(stream);

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<IsPackable>true</IsPackable>
 		<Description>Library that contains the UdpContracts serializer implementation for Utf8Json</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Utf8Json" Version="1.3.7" />
+		<PackageReference Include="Utf8Json" Version="1.3.7" />
 	</ItemGroup>
 
 	<ItemGroup>

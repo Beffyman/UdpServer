@@ -1,4 +1,4 @@
-
+Runtime Net Core 2.2
 Machine CPU: i7-8700 4.6GHz 6-Core
 
 

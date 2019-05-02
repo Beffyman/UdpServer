@@ -22,12 +22,13 @@ namespace Beffyman.UdpServer.Demo.Client
 			{
 				CreateClient();
 
+				//Time estimates are for my local machine (Ryzen 7 2700X 3.7GHz)
 				//await SendMessages(3);
-				await SendMessages(100);//~0.016 sec
-				await SendMessages(1_000);//~0.035 sec
-				await SendMessages(10_000);//~0.18 sec
-				await SendMessages(100_000);//~1.6 sec
-				await SendMessages(1_000_000);//~17 sec
+				await SendMessages(100);//~0.012 sec
+				await SendMessages(1_000);//~0.026 sec
+				await SendMessages(10_000);//~0.165 sec
+				await SendMessages(100_000);//~1.57 sec
+				await SendMessages(1_000_000);//~15 sec
 											  //await SendMessages(10_000_000);//~160 sec
 
 				await ReadLineAsync();

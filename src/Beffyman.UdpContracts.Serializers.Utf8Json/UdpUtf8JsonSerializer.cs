@@ -9,7 +9,7 @@ namespace Beffyman.UdpContracts.Serializers.Utf8Json
 	{
 		public static readonly UdpUtf8JsonSerializer Instance = new UdpUtf8JsonSerializer();
 
-		public object Deserialize(in ReadOnlyMemory<byte> sequence, in Type type)
+		public object Deserialize(in ReadOnlyMemory<byte> sequence, Type type)
 		{
 			return JsonSerializer.NonGeneric.Deserialize(type, sequence.ToArray());
 		}
@@ -19,7 +19,7 @@ namespace Beffyman.UdpContracts.Serializers.Utf8Json
 			return JsonSerializer.Deserialize<T>(sequence.ToArray());
 		}
 
-		public ReadOnlyMemory<byte> Serialize<T>(in T obj)
+		public ReadOnlyMemory<byte> Serialize<T>(T obj)
 		{
 			return JsonSerializer.Serialize<T>(obj);
 		}

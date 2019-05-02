@@ -4,8 +4,8 @@ namespace Beffyman.UdpContracts.Serializers
 {
 	public interface ISerializer
 	{
-		object Deserialize(in ReadOnlyMemory<byte> sequence, in Type type);
+		object Deserialize(in ReadOnlyMemory<byte> sequence, Type type);
 		T Deserialize<T>(in ReadOnlyMemory<byte> sequence);
-		ReadOnlyMemory<byte> Serialize<T>(in T obj);
+		ReadOnlyMemory<byte> Serialize<T>(T obj);
 	}
 }

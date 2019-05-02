@@ -1,4 +1,4 @@
-
+Runtime Net Core 2.2
 Machine CPU: AMD Ryzen 7 1700 8-core 3.00GHz
 
 

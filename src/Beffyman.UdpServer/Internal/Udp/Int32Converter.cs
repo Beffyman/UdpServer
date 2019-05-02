@@ -26,7 +26,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 		[FieldOffset(3)]
 		public readonly byte Byte4;
 
-		public Int32Converter(int value) : this()
+		public Int32Converter(in int value) : this()
 		{
 			Value = value;
 		}
@@ -54,7 +54,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 			return value.Value;
 		}
 
-		public static implicit operator Int32Converter(int value)
+		public static implicit operator Int32Converter(in int value)
 		{
 			return new Int32Converter(value);
 		}
