@@ -25,6 +25,41 @@ namespace Beffyman.UdpServer.Test.Server
 
 		private readonly IDictionary<LogLevel, ICollection<string>> _events;
 
+
+		protected class HandlerLogger : ILogger<HandlerMapper>
+		{
+			private readonly IDictionary<LogLevel, ICollection<string>> _events;
+			public HandlerLogger(IDictionary<LogLevel, ICollection<string>> events)
+			{
+				_events = events;
+			}
+
+			public IDisposable BeginScope<TState>(TState state)
+			{
+				return null;
+			}
+
+			public bool IsEnabled(LogLevel logLevel)
+			{
+				return true;
+			}
+
+			private void AddEvent(LogLevel level, string msg)
+			{
+				if (!_events.ContainsKey(level))
+				{
+					_events.Add(level, new List<string>());
+				}
+
+				_events[level].Add(msg);
+			}
+
+			public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+			{
+				AddEvent(logLevel, formatter(state, exception));
+			}
+		}
+
 		public HandlerMapperTests()
 		{
 			var configuration = new Mock<IUdpConfiguration>();
@@ -40,30 +75,14 @@ namespace Beffyman.UdpServer.Test.Server
 
 			_events = new Dictionary<LogLevel, ICollection<string>>();
 
-			var mockedLogger = new Mock<ILogger<HandlerMapper>>(MockBehavior.Strict);
-			mockedLogger.Setup(x => x.Log<object>(It.IsAny<LogLevel>(), It.IsAny<EventId>(), It.IsAny<object>(), It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()))
-						.Callback((LogLevel logLevel, EventId id, object state, Exception ex, Func<object, Exception, string> formatter) =>
-						{
-							AddEvent(logLevel, formatter(state, ex));
-						});
-
-
-			_logger = mockedLogger.Object;
+			_logger = new HandlerLogger(_events);
 
 			var handlerTypes = Enumerable.Empty<Type>().ToArray();
 
 			_controllerMapper = new HandlerMapper(UdpMessagePackSerializer.Instance, _provider, _logger, _senderFactory, new HandlerRegistry(handlerTypes));
 		}
 
-		private void AddEvent(LogLevel level, string msg)
-		{
-			if (!_events.ContainsKey(level))
-			{
-				_events.Add(level, new List<string>());
-			}
 
-			_events[level].Add(msg);
-		}
 
 		public void Dispose()
 		{
@@ -71,14 +90,14 @@ namespace Beffyman.UdpServer.Test.Server
 		}
 
 		[Fact]
-		public async Task InvalidByteFormat()
+		public void InvalidByteFormat()
 		{
 			var bytes = new byte[17] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 			var buffer = Beffyman.UdpServer.Internal.Extensions.WriteAddressToSpan(9, IPAddress.Loopback, bytes);
 
 
-			await _controllerMapper.HandleAsync(bytes);
+			_controllerMapper.HandleAsync(bytes).GetAwaiter().GetResult();
 
 			Assert.Equal($"Failed to deserialize incoming bytes to a {nameof(UdpMessage)}", _events[LogLevel.Trace].Single());
 		}

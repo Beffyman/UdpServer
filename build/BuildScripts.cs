@@ -41,6 +41,7 @@ public class BuildScripts : NukeBuild
 	AbsolutePath TestsDirectory => RootDirectory / "tests";
 	AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 	AbsolutePath TestArtifactsDirectory => ArtifactsDirectory / "tests";
+	AbsolutePath NugetDirectory => ArtifactsDirectory / "nuget";
 	AbsolutePath CodeCoverageReportOutput => TestArtifactsDirectory / "Reports";
 	AbsolutePath CodeCoverageFile => TestArtifactsDirectory / "coverage.cobertura.xml";
 
@@ -74,6 +75,7 @@ public class BuildScripts : NukeBuild
 				.SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
 				.SetFileVersion(GitVersion.GetNormalizedFileVersion())
 				.SetInformationalVersion(GitVersion.InformationalVersion)
+				.AddProperty("TreatWarningsAsErrors", "true")
 				.EnableNoRestore());
 		});
 
@@ -92,7 +94,7 @@ public class BuildScripts : NukeBuild
 					.SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
 					.SetFileVersion(GitVersion.GetNormalizedFileVersion())
 					.SetInformationalVersion(GitVersion.InformationalVersion)
-					.SetOutputDirectory(ArtifactsDirectory / "nuget"));
+					.SetOutputDirectory(NugetDirectory));
 		});
 
 	Target Test => _ => _
@@ -144,7 +146,7 @@ public class BuildScripts : NukeBuild
 
 
 	Target Report => _ => _
-		.DependsOn(Pack)
+		.DependsOn(Test)
 		.Executes(() =>
 		{
 			ReportGenerator(s => s.SetReports(CodeCoverageFile)
@@ -155,6 +157,7 @@ public class BuildScripts : NukeBuild
 
 
 	Target CI => _ => _
+		.DependsOn(Pack)
 		.DependsOn(Report)
 		.Executes(() => { });
 }
