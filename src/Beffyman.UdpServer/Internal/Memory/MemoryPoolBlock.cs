@@ -16,7 +16,7 @@ namespace Beffyman.UdpServer.Internal.Memory
 		/// <summary>
 		/// This object cannot be instantiated outside of the static Create method
 		/// </summary>
-		internal MemoryPoolBlock(SlabMemoryPool pool, MemoryPoolSlab slab, in int offset, in int length)
+		internal MemoryPoolBlock(SlabMemoryPool pool, MemoryPoolSlab slab, int offset, int length)
 		{
 			_offset = offset;
 			_length = length;

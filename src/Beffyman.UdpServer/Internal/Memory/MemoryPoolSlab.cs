@@ -16,7 +16,7 @@ namespace Beffyman.UdpServer.Internal.Memory
 		private GCHandle _gcHandle;
 		private bool _isDisposed;
 
-		public MemoryPoolSlab(in byte[] data)
+		public MemoryPoolSlab(byte[] data)
 		{
 			Array = data;
 			_gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -37,7 +37,7 @@ namespace Beffyman.UdpServer.Internal.Memory
 
 		public byte[] Array { get; private set; }
 
-		public static MemoryPoolSlab Create(in int length)
+		public static MemoryPoolSlab Create(int length)
 		{
 			// allocate and pin requested memory length
 			var array = new byte[length];

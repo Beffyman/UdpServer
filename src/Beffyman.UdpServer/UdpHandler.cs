@@ -21,9 +21,9 @@ namespace Beffyman.UdpServer
 		}
 
 
-		public abstract ValueTask HandleAsync(in T request);
+		public abstract Task HandleAsync(T request);
 
-		internal ValueTask Handle(in HandlerInfo info, ISerializer serializer)
+		internal Task Handle(HandlerInfo info, ISerializer serializer)
 		{
 			SetInfo(info);
 

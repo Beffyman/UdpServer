@@ -50,7 +50,7 @@ namespace Beffyman.UdpServer.Test.Server
 
 			_logger = mockedLogger.Object;
 
-			var handlerTypes = new List<Type>();
+			var handlerTypes = Enumerable.Empty<Type>().ToArray();
 
 			_controllerMapper = new HandlerMapper(UdpMessagePackSerializer.Instance, _provider, _logger, _senderFactory, new HandlerRegistry(handlerTypes));
 		}
@@ -84,7 +84,7 @@ namespace Beffyman.UdpServer.Test.Server
 		}
 
 		[Fact]
-		public async Task MissingHandler()
+		public void MissingHandler()
 		{
 			var message = UdpMessage.Create(new ErrorMessageDto
 			{
@@ -101,7 +101,7 @@ namespace Beffyman.UdpServer.Test.Server
 			var buffer = Beffyman.UdpServer.Internal.Extensions.WriteAddressToSpan(dgram.Length, IPAddress.Loopback, array);
 
 
-			await _controllerMapper.HandleAsync(array);
+			_controllerMapper.HandleAsync(array).GetAwaiter().GetResult();
 
 			Assert.Equal($"No {nameof(UdpHandler<object>)} setup for type {message.Type}, ignoring.", _events[LogLevel.Warning].Single());
 		}

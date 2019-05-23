@@ -16,10 +16,10 @@ namespace Beffyman.UdpServer.Demo.Handlers
 			_counterService = counterService;
 		}
 
-		public override ValueTask HandleAsync(in StartTimerMessage request)
+		public override Task HandleAsync(StartTimerMessage request)
 		{
 			_counterService.Start(request.ExpectedMessages);
-			return new ValueTask(Task.CompletedTask);
+			return Task.CompletedTask;
 		}
 	}
 }

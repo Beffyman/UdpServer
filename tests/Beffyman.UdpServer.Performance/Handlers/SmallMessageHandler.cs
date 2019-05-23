@@ -8,9 +8,9 @@ namespace Beffyman.UdpServer.Performance.Handlers
 {
 	public class SmallMessageHandler : UdpHandler<SmallMessage>
 	{
-		public override ValueTask HandleAsync(in SmallMessage request)
+		public override Task HandleAsync(SmallMessage request)
 		{
-			return new ValueTask(Task.CompletedTask);
+			return Task.CompletedTask;
 		}
 	}
 }

@@ -19,11 +19,11 @@ namespace Beffyman.UdpServer.Demo.Controllers
 			_counter = counter;
 		}
 
-		public override ValueTask HandleAsync(in MyDto request)
+		public override Task HandleAsync(MyDto request)
 		{
-			_logger.LogTrace(request.ToString());
+			//_logger.LogTrace(request.ToString());
 			_counter.Count(Bytes);
-			return new ValueTask(Task.CompletedTask);
+			return Task.CompletedTask;
 		}
 	}
 }

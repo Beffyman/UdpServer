@@ -16,11 +16,11 @@ namespace Beffyman.UdpServer.Demo.Handlers
 			_applicationLifetime = applicationLifetime;
 		}
 
-		public override ValueTask HandleAsync(in ShutdownMessage request)
+		public override Task HandleAsync(ShutdownMessage request)
 		{
 			_applicationLifetime.StopApplication();
 
-			return new ValueTask(Task.CompletedTask);
+			return Task.CompletedTask;
 		}
 	}
 }

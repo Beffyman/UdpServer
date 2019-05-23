@@ -7,9 +7,9 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 {
 	internal sealed class HandlerRegistry
 	{
-		public IEnumerable<Type> Handlers { get; private set; }
+		public readonly Type[] Handlers;
 
-		public HandlerRegistry(IEnumerable<Type> handlers)
+		public HandlerRegistry(Type[] handlers)
 		{
 			Handlers = handlers;
 		}

@@ -11,7 +11,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 	{
 		IPAddress Address { get; }
 
-		ValueTask SendAsync<T>(T message, ISerializer serializer);
+		Task<int> SendAsync<T>(T message, ISerializer serializer);
 	}
 
 	internal sealed class UdpSender : IUdpSender
@@ -38,11 +38,11 @@ namespace Beffyman.UdpServer.Internal.Udp
 			_client.Dispose();
 		}
 
-		public async ValueTask SendAsync<T>(T message, ISerializer serializer)
+		public Task<int> SendAsync<T>(T message, ISerializer serializer)
 		{
 			ReadOnlyMemory<byte> data = serializer.Serialize(message);
 
-			await _client.SendAsync(data.ToArray(), data.Length);
+			return _client.SendAsync(data.ToArray(), data.Length);
 		}
 	}
 }

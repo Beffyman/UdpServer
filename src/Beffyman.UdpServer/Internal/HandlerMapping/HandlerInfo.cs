@@ -7,13 +7,13 @@ using Beffyman.UdpServer.Internal.Udp;
 
 namespace Beffyman.UdpServer.Internal.HandlerMapping
 {
-	internal readonly struct HandlerInfo
+	internal class HandlerInfo
 	{
 		public readonly int Bytes;
 		public readonly ReadOnlyMemory<byte> Data;
 		public readonly IUdpSender Sender;
 
-		public HandlerInfo(in int bytes, in ReadOnlyMemory<byte> data, IUdpSender sender)
+		public HandlerInfo(int bytes, in ReadOnlyMemory<byte> data, IUdpSender sender)
 		{
 			Bytes = bytes;
 			Data = data;

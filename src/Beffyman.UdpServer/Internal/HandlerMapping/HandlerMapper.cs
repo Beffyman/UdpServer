@@ -39,7 +39,7 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 			_mappings = _controllerRegistry.Handlers.Select(x => new HandlerMapping(x)).ToDictionary(x => x.MessageType, y => y);
 		}
 
-		public async ValueTask HandleAsync(ReadOnlyMemory<byte> buffer)
+		public Task HandleAsync(in ReadOnlyMemory<byte> buffer)
 		{
 			int addressLengthArrayLengthStart;
 			int addressLength;
@@ -58,7 +58,7 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 
 				addressSlice = buffer.Slice(addressLengthArrayLengthStart - addressLength, addressLength);
 
-				address = new IPAddress(addressSlice.ToArray());//allocating here, sigh, no allocation free way
+				address = new IPAddress(addressSlice.Span);//allocating here, sigh, no allocation free way
 
 				messageBuffer = buffer.Slice(0, addressLengthArrayLengthStart - addressLength);
 
@@ -71,13 +71,13 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 				catch (Exception ex)
 				{
 					_logger.LogTrace(ex, $"Failed to deserialize incoming bytes to a {nameof(UdpMessage)}", null);
-					return;
+					return Task.CompletedTask;
 				}
 
 				if (!_mappings.ContainsKey(message.Type))
 				{
 					_logger.LogWarning($"No {nameof(UdpHandler<object>)} setup for type {message.Type}, ignoring.", null);
-					return;
+					return Task.CompletedTask;
 				}
 
 				var info = new HandlerInfo(messageBuffer.Length, message.Data, _senderFactory.GetSender(address));
@@ -87,12 +87,13 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 					var mapping = _mappings[message.Type];
 					var controller = scope.ServiceProvider.GetRequiredService(mapping.ControllerType);
 
-					await mapping.HandleAsync(controller, info, _serializer);
+					return mapping.HandleAsync(controller, info, _serializer);
 				}
 			}
 			catch (Exception ex)
 			{
 				_logger.LogError(ex);
+				return Task.CompletedTask;
 			}
 		}
 

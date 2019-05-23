@@ -9,7 +9,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 	/// https://stackoverflow.com/a/4176752
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
-	internal readonly struct Int32Converter
+	internal readonly ref struct Int32Converter
 	{
 		//Neat trick here to assign the int into the stack
 		//But also say that the next 4 addresses on the same address that we assigned the int to are a group of 4 bytes
@@ -17,6 +17,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 
 		[FieldOffset(0)]
 		public readonly int Value;
+
 		[FieldOffset(0)]
 		public readonly byte Byte1;
 		[FieldOffset(1)]
@@ -26,7 +27,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 		[FieldOffset(3)]
 		public readonly byte Byte4;
 
-		public Int32Converter(in int value) : this()
+		public Int32Converter(int value) : this()
 		{
 			Value = value;
 		}
@@ -54,7 +55,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 			return value.Value;
 		}
 
-		public static implicit operator Int32Converter(in int value)
+		public static implicit operator Int32Converter(int value)
 		{
 			return new Int32Converter(value);
 		}

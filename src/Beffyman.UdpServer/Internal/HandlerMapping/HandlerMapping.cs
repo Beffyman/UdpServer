@@ -13,7 +13,7 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 	{
 		public string MessageType { get; private set; }
 		public Type ControllerType { get; private set; }
-		public Func<object, HandlerInfo, ISerializer, ValueTask> HandleAsync { get; private set; }
+		public HandlerDelegate HandleAsync { get; private set; }
 
 
 		public HandlerMapping(Type type)
@@ -44,7 +44,7 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 
 			var handle = Expression.Call(castArg, handleMethod, info, serializer);
 
-			HandleAsync = Expression.Lambda<Func<object, HandlerInfo, ISerializer, ValueTask>>(handle, new ParameterExpression[] { arg, info, serializer }).Compile();
+			HandleAsync = Expression.Lambda<HandlerDelegate>(handle, new ParameterExpression[] { arg, info, serializer }).Compile();
 		}
 
 
@@ -56,7 +56,7 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 				&& arg.IsGenericType
 				&& arg.GetGenericTypeDefinition() == typeof(UdpHandler<>))
 			{
-				return arg.GetGenericArguments().Single();
+				return arg.GetGenericArguments()[0];
 			}
 			else
 			{

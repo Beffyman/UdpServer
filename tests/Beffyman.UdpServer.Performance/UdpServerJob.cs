@@ -27,7 +27,6 @@ namespace Beffyman.UdpServer.Performance
 		private HandlerMapping _mapping;
 
 		private ISerializer _serializer;
-		private Datagram _dgram;
 		private SmallMessageHandler _handler;
 		private HandlerInfo _handlerInfo;
 
@@ -36,7 +35,7 @@ namespace Beffyman.UdpServer.Performance
 		{
 			_mapping = new HandlerMapping(typeof(SmallMessageHandler));
 			_serializer = UdpMessagePackSerializer.Instance;
-			_dgram = UdpMessage.Create(new SmallMessage(10), _serializer).ToDgram(_serializer);
+			var _dgram = UdpMessage.Create(new SmallMessage(10), _serializer).ToDgram(_serializer);
 			_handler = new SmallMessageHandler();
 			_handlerInfo = new HandlerInfo(_dgram, null);
 		}
@@ -52,7 +51,7 @@ namespace Beffyman.UdpServer.Performance
 
 
 		[Benchmark]
-		public ValueTask HandlerInvoke()
+		public Task HandlerInvoke()
 		{
 			//We have an allocation from the deserialize
 			return _mapping.HandleAsync(_handler, _handlerInfo, _serializer);

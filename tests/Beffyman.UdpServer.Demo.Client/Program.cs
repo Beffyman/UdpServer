@@ -6,8 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Beffyman.UdpContracts;
 using Beffyman.UdpContracts.Serializers.MessagePack;
+using Beffyman.UdpContracts.Serializers.Json;
 using Beffyman.UdpServer.Demo.Contracts;
 using static System.Console;
+using Beffyman.UdpContracts.Serializers;
 
 namespace Beffyman.UdpServer.Demo.Client
 {
@@ -15,6 +17,8 @@ namespace Beffyman.UdpServer.Demo.Client
 	{
 
 		private static UdpClient _client;
+		private static ISerializer Serializer = UdpMessagePackSerializer.Instance;
+		//private static ISerializer Serializer = UdpJsonSerializer.Instance;
 
 		public static async Task Main(string[] args)
 		{
@@ -73,7 +77,7 @@ namespace Beffyman.UdpServer.Demo.Client
 			WriteLine($"Waiting 5 seconds for {count} message request");
 			await Task.Delay(5000);
 
-			await _client.SendAsync(new StartTimerMessage(count), UdpMessagePackSerializer.Instance);
+			await _client.SendAsync(new StartTimerMessage(count), Serializer);
 
 			for (int i = 0; i < count; i++)
 			{
@@ -85,10 +89,10 @@ namespace Beffyman.UdpServer.Demo.Client
 					When = DateTime.Now
 				};
 
-				await _client.SendAsync(dto, UdpMessagePackSerializer.Instance);
+				await _client.SendAsync(dto, Serializer);
 			}
 
-			await _client.SendAsync<StopTimerMessage>(UdpMessagePackSerializer.Instance);
+			await _client.SendAsync<StopTimerMessage>(Serializer);
 		}
 
 		private static async Task ErrorMessageTest()
@@ -104,7 +108,7 @@ namespace Beffyman.UdpServer.Demo.Client
 
 		private static async Task ShutdownServer()
 		{
-			await _client.SendAsync<ShutdownMessage>(UdpMessagePackSerializer.Instance);
+			await _client.SendAsync<ShutdownMessage>(Serializer);
 		}
 
 	}

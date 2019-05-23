@@ -105,8 +105,8 @@ namespace Beffyman.UdpServer.Internal.Udp
 				await ProcessReceives();
 			}
 			catch (Exception ex)
-				when ((ex is SocketException socketEx && IsConnectionAbortError(socketEx.SocketErrorCode)) ||
-					   ex is ObjectDisposedException)
+				when ((ex is SocketException socketEx && IsConnectionAbortError(socketEx.SocketErrorCode))
+					|| ex is ObjectDisposedException)
 			{
 				// This exception should always be ignored because _shutdownReason should be set.
 				error = ex;
