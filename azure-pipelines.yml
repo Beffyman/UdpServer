@@ -6,6 +6,7 @@
 trigger:
 - master
 - refs/tags/*
+- feature/*
 
 pr:
   autoCancel: true
