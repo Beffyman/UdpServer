@@ -1,16 +1,15 @@
-﻿using System.Threading.Tasks;
-using Beffyman.UdpContracts.Serializers.Json;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Beffyman.UdpContracts.Serializers.MessagePack;
 using Beffyman.UdpServer.Demo.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace Beffyman.UdpServer.Demo
 {
-	public class Program
+	public static class Program
 	{
 		public static Task Main(string[] args)
 		{
