@@ -110,7 +110,7 @@ public class BuildScripts : NukeBuild
 				.SetLogOutput(true)
 				.SetArgumentConfigurator(arguments => arguments.Add("/p:CollectCoverage={0}", "true")
 					.Add("/p:CoverletOutput={0}/", TestArtifactsDirectory)
-					.Add("/p:Threshold={0}", 90)
+					//.Add("/p:Threshold={0}", 90)
 					.Add("/p:Exclude=\"[xunit*]*%2c[*.Tests]*\"")
 					.Add("/p:UseSourceLink={0}", "true")
 					.Add("/p:CoverletOutputFormat={0}", "cobertura"))
