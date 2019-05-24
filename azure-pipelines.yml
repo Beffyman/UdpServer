@@ -38,8 +38,7 @@ steps:
   displayName: 'Build'
   inputs:
     command: 'run'
-    projects: './build/_build.csproj'
-    arguments: '-target CI'
+    arguments: '--project ./build/_build.csproj -target CI'
 - task: PublishTestResults@2
   inputs:
    testResultsFormat: 'VSTest'
