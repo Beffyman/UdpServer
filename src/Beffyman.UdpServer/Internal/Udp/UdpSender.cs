@@ -1,5 +1,4 @@
 using System;
-using System.IO.Pipelines;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -7,13 +6,6 @@ using Beffyman.UdpContracts.Serializers;
 
 namespace Beffyman.UdpServer.Internal.Udp
 {
-	public interface IUdpSender : IDisposable
-	{
-		IPAddress Address { get; }
-
-		Task<int> SendAsync<T>(T message, ISerializer serializer);
-	}
-
 	internal sealed class UdpSender : IUdpSender
 	{
 		public IPAddress Address { get; private set; }

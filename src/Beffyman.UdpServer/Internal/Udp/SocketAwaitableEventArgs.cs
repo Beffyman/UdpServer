@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Beffyman.UdpServer.Internal.Udp
 {
-	public sealed class SocketAwaitableEventArgs : SocketAsyncEventArgs, INotifyCompletion
+	internal sealed class SocketAwaitableEventArgs : SocketAsyncEventArgs, INotifyCompletion
 	{
 		private static readonly Action _callbackCompleted = () => { };
 

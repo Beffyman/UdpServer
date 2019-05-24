@@ -8,11 +8,6 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Beffyman.UdpServer.Internal.Udp
 {
-	public interface IUdpSenderFactory
-	{
-		IUdpSender GetSender(IPAddress address);
-	}
-
 	internal sealed class UdpSenderFactory : IUdpSenderFactory
 	{
 		private readonly IMemoryCache SenderCache;
