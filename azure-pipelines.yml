@@ -6,6 +6,7 @@
 trigger:
 - master
 - refs/tags/*
+- feature/*
 
 pr:
   autoCancel: true
@@ -34,13 +35,11 @@ steps:
   displayName: GitVersion
   inputs:
     preferBundledVersion: false
-- task: PowerShell@2
-  inputs:
-    targetType: 'filePath'
-    filePath: 'build.ps1'
-    arguments: '-configuration $(buildConfiguration) -target CI'
-    failOnStderr: true
+- task: DotNetCoreCLI@2
   displayName: 'Build'
+  inputs:
+    command: 'run'
+    arguments: '--project ./build/_build.csproj -target CI'
 - task: PublishTestResults@2
   inputs:
    testResultsFormat: 'VSTest'
