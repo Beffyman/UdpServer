@@ -12,14 +12,16 @@ namespace Beffyman.UdpServer
 	public abstract class UdpHandler<T>
 	{
 		protected int Bytes { get; private set; }
-		protected IUdpSender Sender { get; private set; }
+		private IUdpSenderFactory _senderFactory;
+		protected IPAddress SenderAddress;
+		public IUdpSender Sender => _senderFactory.GetSender(SenderAddress);
 
-		internal void SetInfo(in HandlerInfo info)
+		internal void SetInfo(HandlerInfo info)
 		{
 			Bytes = info.Bytes;
-			Sender = info.Sender;
+			_senderFactory = info.SenderFactory;
+			SenderAddress = info.Address;
 		}
-
 
 		public abstract Task HandleAsync(T request);
 

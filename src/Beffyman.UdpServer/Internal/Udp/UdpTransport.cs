@@ -118,7 +118,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 						endPoint = (IPEndPoint)listenSocket.LocalEndPoint;
 					}
 
-					var connection = new UdpConnection(listenSocket, _memoryPool, _schedulers[schedulerIndex], _logger, _handlerMapper);
+					var connection = new UdpConnection(listenSocket, _memoryPool, _schedulers[schedulerIndex], _udpConfiguration, _logger, _handlerMapper);
 					connections.Add(connection);
 
 					// REVIEW: This task should be tracked by the server for graceful shutdown

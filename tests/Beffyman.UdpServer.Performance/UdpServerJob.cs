@@ -37,7 +37,7 @@ namespace Beffyman.UdpServer.Performance
 			_serializer = UdpMessagePackSerializer.Instance;
 			var _dgram = UdpMessage.Create(new SmallMessage(10), _serializer).ToDgram(_serializer);
 			_handler = new SmallMessageHandler();
-			_handlerInfo = new HandlerInfo(_dgram, null);
+			_handlerInfo = new HandlerInfo(_dgram, null, null);
 		}
 
 		[GlobalCleanup]

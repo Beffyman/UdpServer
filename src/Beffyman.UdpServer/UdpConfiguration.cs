@@ -11,7 +11,7 @@ namespace Beffyman.UdpServer
 		ushort ReceivePort { get; set; }
 
 		/// <summary>
-		/// Buffer for incoming messages, if it is too small, the incoming requests will be dropped which will show up as packet loss. Default Value is 2.5e+7
+		/// Buffer for incoming messages, if it is too small, the incoming requests will be dropped which will show up as packet loss. Default Value is 65_507
 		/// </summary>
 		int ReceiveBufferSize { get; set; }
 
@@ -49,7 +49,7 @@ namespace Beffyman.UdpServer
 		public ushort SendPort { get; set; } = 6200;
 		public int SendBufferSize { get; set; } = (int)2.5e+5;
 		public ushort ReceivePort { get; set; } = 6100;
-		public int ReceiveBufferSize { get; set; } = (int)2.5e+5;//250_000
+		public int ReceiveBufferSize { get; set; } = 65_507;
 
 		public int IOQueueCount { get; set; } = Math.Min(Environment.ProcessorCount, 16);
 

@@ -32,6 +32,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 		private readonly Socket _socket;
 		private readonly ILogger _logger;
 		private readonly HandlerMapper _handlerMapper;
+		private readonly IUdpConfiguration _udpConfiguration;
 
 		private readonly UdpReceiver _receiver;
 		private readonly CancellationTokenSource _connectionClosingCts = new CancellationTokenSource();
@@ -44,6 +45,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 		internal UdpConnection(Socket socket,
 			MemoryPool<byte> memoryPool,
 			PipeScheduler scheduler,
+			IUdpConfiguration udpConfiguration,
 			ILogger logger,
 			HandlerMapper handlerMapper)
 		{
@@ -57,6 +59,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 			Scheduler = scheduler;
 			_logger = logger;
 			_handlerMapper = handlerMapper;
+			_udpConfiguration = udpConfiguration;
 
 			// On *nix platforms, Sockets already dispatches to the ThreadPool.
 			// Yes, the IOQueues are still used for the PipeSchedulers. This is intentional.
@@ -136,6 +139,7 @@ namespace Beffyman.UdpServer.Internal.Udp
 			{
 				// Ensure we have some reasonable amount of buffer space
 				var buffer = ReceiverPipe.GetMemory(MemoryPool.MaxBufferSize);
+				//var buffer = ReceiverPipe.GetMemory(_udpConfiguration.ReceiveBufferSize);
 
 				var bytesReceived = await _receiver.ReceiveAsync(buffer);
 

@@ -80,7 +80,7 @@ namespace Beffyman.UdpServer.Internal.HandlerMapping
 					return Task.CompletedTask;
 				}
 
-				var info = new HandlerInfo(messageBuffer.Length, message.Data, _senderFactory.GetSender(address));
+				var info = new HandlerInfo(messageBuffer.Length, message.Data, _senderFactory, address);
 
 				using (var scope = _provider.CreateScope())
 				{
