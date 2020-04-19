@@ -15,6 +15,7 @@ using Beffyman.UdpServer.Internal.HandlerMapping;
 using Beffyman.UdpServer.Performance.Handlers;
 using Beffyman.UdpContracts.Serializers;
 using Beffyman.UdpServer.Internal.Udp;
+using Beffyman.UdpContracts.Serializers.Json;
 
 namespace Beffyman.UdpServer.Performance
 {
@@ -102,6 +103,18 @@ namespace Beffyman.UdpServer.Performance
 		public UdpMessage UdpMessageAlloc_Newtonsoft()
 		{
 			return UdpMessage.Create(new SmallMessage(10), UdpNewtonsoftJsonSerializer.Instance);
+		}
+
+		[Benchmark]
+		public ReadOnlyMemory<byte> DgramAlloc_SystemJson()
+		{
+			return UdpMessage.Create(new SmallMessage(10), UdpJsonSerializer.Instance).ToDgram(UdpJsonSerializer.Instance).Data;
+		}
+
+		[Benchmark]
+		public UdpMessage UdpMessageAlloc_SystemJson()
+		{
+			return UdpMessage.Create(new SmallMessage(10), UdpJsonSerializer.Instance);
 		}
 
 		#endregion Serialization Alloc Benchmarks

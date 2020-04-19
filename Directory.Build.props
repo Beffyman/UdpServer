@@ -1,6 +1,6 @@
 <Project>
 	<PropertyGroup>
-		<LangVersion>latest</LangVersion>
+		<LangVersion>7.3</LangVersion>
 		<IsPackable>false</IsPackable>
 		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 		<TieredCompilation>true</TieredCompilation>
@@ -9,7 +9,7 @@
 
 	<!--Define nupkg -->
 	<PropertyGroup>
-		<Copyright>Copyright 2019</Copyright>
+		<Copyright>Copyright 2020</Copyright>
 		<Authors>Beffyman</Authors>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Beffyman/UdpServer</RepositoryUrl>
@@ -27,9 +27,9 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>-->
 
-		<PackageReference Include="ErrorProne.NET.Structs" Version="0.1.2">
+		<!--<PackageReference Include="ErrorProne.NET.Structs" Version="0.1.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
+		</PackageReference>-->
 	</ItemGroup>
 </Project>

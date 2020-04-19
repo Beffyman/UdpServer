@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace Beffyman.UdpContracts.Serializers.Json
 {
-	[Obsolete("Does not currently support structs", true)]
 	public class UdpJsonSerializer : ISerializer
 	{
 		public static readonly UdpJsonSerializer Instance = new UdpJsonSerializer();
@@ -17,17 +16,17 @@ namespace Beffyman.UdpContracts.Serializers.Json
 
 		public object Deserialize(in ReadOnlyMemory<byte> sequence, Type type)
 		{
-			return JsonSerializer.Parse(sequence.Span, type, _settings);
+			return JsonSerializer.Deserialize(sequence.Span, type, _settings);
 		}
 
 		public T Deserialize<T>(in ReadOnlyMemory<byte> sequence)
 		{
-			return JsonSerializer.Parse<T>(sequence.Span, _settings);
+			return JsonSerializer.Deserialize<T>(sequence.Span, _settings);
 		}
 
 		public ReadOnlyMemory<byte> Serialize<T>(T obj)
 		{
-			return JsonSerializer.ToBytes(obj, _settings);
+			return JsonSerializer.SerializeToUtf8Bytes(obj, _settings);
 		}
 	}
 }

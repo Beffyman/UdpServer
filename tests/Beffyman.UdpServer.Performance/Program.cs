@@ -16,7 +16,5 @@ namespace Beffyman.UdpServer.Performance
 				Console.WriteLine(ex.ToString());
 			}
 		}
-
-
 	}
 }
