@@ -26,9 +26,6 @@ steps:
     useGlobalJson: true
 - script: dotnet --info
   displayName: Dump Info
-- task: gitversion-execute@1
-  inputs:
-    useConfigFile: true
 - task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:

@@ -159,5 +159,8 @@ public class BuildScripts : NukeBuild
 	Target CI => _ => _
 		.DependsOn(Pack)
 		.DependsOn(Report)
-		.Executes(() => { });
+		.Executes(() =>
+		{
+			Nuke.Common.CI.AzurePipelines.AzurePipelines.Instance?.UpdateBuildNumber(GitVersion.NuGetVersionV2);
+		});
 }
