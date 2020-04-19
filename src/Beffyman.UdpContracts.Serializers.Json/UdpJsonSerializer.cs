@@ -16,11 +16,21 @@ namespace Beffyman.UdpContracts.Serializers.Json
 
 		public object Deserialize(in ReadOnlyMemory<byte> sequence, Type type)
 		{
+			if (sequence.IsEmpty)
+			{
+				return Activator.CreateInstance(type);
+			}
+
 			return JsonSerializer.Deserialize(sequence.Span, type, _settings);
 		}
 
 		public T Deserialize<T>(in ReadOnlyMemory<byte> sequence)
 		{
+			if (sequence.IsEmpty)
+			{
+				return default(T);
+			}
+
 			return JsonSerializer.Deserialize<T>(sequence.Span, _settings);
 		}
 

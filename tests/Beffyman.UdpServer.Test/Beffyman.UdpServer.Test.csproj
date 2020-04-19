@@ -23,6 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\Beffyman.UdpContracts.Serializers.Json\Beffyman.UdpContracts.Serializers.Json.csproj" />
 		<ProjectReference Include="..\..\src\Beffyman.UdpContracts.Serializers.MessagePack\Beffyman.UdpContracts.Serializers.MessagePack.csproj" />
 		<ProjectReference Include="..\..\src\Beffyman.UdpContracts.Serializers.NewtonsoftJson\Beffyman.UdpContracts.Serializers.NewtonsoftJson.csproj" />
 		<ProjectReference Include="..\..\src\Beffyman.UdpContracts.Serializers.Utf8Json\Beffyman.UdpContracts.Serializers.Utf8Json.csproj" />
